@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kalifornien 2026 Reiseguide</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--blue:#2563eb;--green:#16a34a;--orange:#ea580c;--purple:#7c3aed;--red:#dc2626;--cyan:#0891b2;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;padding-bottom:80px}
+.hdr{background:linear-gradient(135deg,#1e40af,#7c3aed);color:#fff;padding:16px;text-align:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.hdr h1{font-size:18px;font-weight:700}.hdr p{font-size:12px;opacity:.85;margin-top:2px}
+.day-bar{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding:10px 10px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:52px;z-index:999}
+.day-btn{flex-shrink:0;padding:8px 14px;border-radius:20px;border:2px solid #e2e8f0;background:#fff;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;min-width:52px}
+.day-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.day-btn.today{border-color:var(--orange);color:var(--orange)}
+.day-btn.today.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.day-btn .d-num{font-size:15px;font-weight:800;display:block}.day-btn .d-wd{font-size:10px;display:block;margin-top:1px}
+.page{display:none;padding:12px}.page.active{display:block}
+.day-hdr{border-radius:var(--r);padding:16px;margin-bottom:12px;text-align:center;color:#fff}
+.day-hdr h2{font-size:17px}.day-hdr p{font-size:12px;opacity:.85;margin-top:4px}
+.card{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid var(--blue)}
+.card.g{border-left-color:var(--green)}.card.o{border-left-color:var(--orange)}.card.p{border-left-color:var(--purple)}.card.r{border-left-color:var(--red)}.card.c{border-left-color:var(--cyan)}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.ce{font-size:22px;flex-shrink:0}.ct{font-size:14px;font-weight:700;line-height:1.3}.cs{font-size:11px;color:var(--muted);margin-top:1px}
+.cb{font-size:13px;line-height:1.6;color:#475569}.cb p{margin-bottom:4px}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;margin-right:3px;margin-bottom:3px}
+.tf{background:#dcfce7;color:#166534}.tp{background:#fef3c7;color:#92400e}.tt{background:#e0e7ff;color:#3730a3}.ti{background:#fce7f3;color:#9d174d}
+.al{display:inline-flex;align-items:center;gap:4px;color:var(--blue);text-decoration:none;font-size:12px;font-weight:500;margin-top:4px;margin-right:8px}
+.al:active{opacity:.7}
+.al svg{width:13px;height:13px;flex-shrink:0}
+.ph{color:var(--green);font-weight:600;text-decoration:none;font-size:13px}
+.tl{position:relative;padding-left:26px}.tl::before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:#e2e8f0}
+.ti2{position:relative;margin-bottom:14px}
+.td{position:absolute;left:-22px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tm{font-size:11px;font-weight:700}.tn{font-size:13px;font-weight:600;margin-top:1px}.tx{font-size:11px;color:var(--muted);margin-top:1px}
+.opt-box{background:#f0f9ff;border:1px solid #bae6fd;border-radius:var(--r);padding:12px;margin-bottom:10px}
+.opt-box.warn{background:#fef3c7;border-color:#fde68a}
+.opt-box h4{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.opt-box.warn h4{color:#92400e}
+.opt-row{display:flex;gap:8px;margin-bottom:8px}
+.opt-card{flex:1;background:#fff;border-radius:8px;padding:10px;border:2px solid #e2e8f0;font-size:12px;cursor:pointer;transition:all .2s}
+.opt-card:active{border-color:var(--blue);background:#eff6ff}
+.opt-card .oc-t{font-weight:700;margin-bottom:4px;font-size:13px}.opt-card .oc-d{color:var(--muted);line-height:1.4}
+#map{height:45vh;min-height:260px;border-radius:var(--r);margin-bottom:10px;z-index:1}
+.marker-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid;box-shadow:0 2px 8px rgba(0,0,0,.2);background:#fff;transition:transform .2s}
+.marker-dot:hover{transform:scale(1.3)}
+.ck{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
+.ck:last-child{border-bottom:none}
+.cb2{width:22px;height:22px;border-radius:6px;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;margin-top:1px}
+.cb2.chk{background:var(--green);border-color:var(--green)}.cb2.chk::after{content:'\2713';color:#fff;font-size:14px;font-weight:700}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>Kalifornien 2026</h1>
+  <p>Norbert, Ines & Mika | 30.03. – 12.04.</p>
+</div>
+<div class="day-bar" id="dayBar"></div>
+<div id="pages"></div>
+
+<div class="footer">Kalifornien 2026 Reiseguide — Stand 03.04.2026</div>
+
+<script>
+function mapPin(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';}
+
+const DAYS = [
+  {
+    date:'2026-03-30', num:1, wd:'Mo', label:'30.3.', title:'Ankunft SFO',
+    color:'#1e40af', desc:'Ankunft 15:25, Auto der Freunde, Einkauf, ankommen',
+    timeline:[
+      {t:'15:25',n:'Ankunft SFO',d:'Direktflug aus Frankfurt',c:'#1e40af'},
+      {t:'16:30',n:'Auto der Freunde übernehmen',d:'Fahrt nach Los Altos',c:'#1e40af'},
+      {t:'17:30',n:'Ankommen bei Kathrin & Damian',d:'1673 Newcastle Drive, Los Altos',c:'#16a34a'},
+      {t:'18:30',n:'Einkauf Trader Joe\'s / Safeway',d:'Frühstück, Snacks, Basics',c:'#1e40af'},
+      {t:'20:00',n:'Früh schlafen',d:'Jetlag bekämpfen!',c:'#64748b'},
+    ],
+    cards:[
+      {emoji:'🛬',title:'Ankunft & Transfer',body:'Euer Direktflug LH456 landet um 15:25 am SFO International Terminal G. Kathrin & Damian holen euch ab. Fahrt nach Los Altos ~30 Min.',links:[{text:'Apple Maps SFO',url:'https://maps.apple.com/?q=SFO+Airport&ll=37.6213,-122.3790'}]},
+      {emoji:'🛒',title:'Erster Einkauf',body:'Trader Joe\'s oder Safeway in Los Altos. Frühstück, Snacks, Wasser, Sonnencreme kaufen. Tipp: Trader Joe\'s hat tolle Fertiggerichte für unterwegs!',links:[{text:'Trader Joe\'s Los Altos',url:'https://maps.apple.com/?q=Trader+Joes+Los+Altos&ll=37.3789,-122.1141'}]},
+      {emoji:'💤',title:'Jetlag-Tipp',body:'Versucht bis mindestens 20 Uhr wach zu bleiben! Tageslicht hilft beim Umstellen. Kein Nickerchen am Nachmittag!',cls:'o'},
+    ],
+    spots:[],options:[]
+  },
+  {
+    date:'2026-03-31', num:2, wd:'Di', label:'31.3.', title:'Silicon Valley Tech Tour',
+    color:'#0f172a', desc:'Apple, Google, Steve Jobs Garage, Stanford & mehr',
+    timeline:[
+      {t:'09:00',n:'Steve Jobs Garage',d:'2066 Crist Drive, Los Altos — Fotostopp',c:'#1e40af'},
+      {t:'09:30',n:'Apple Park Visitor Center',d:'10600 N Tantau Ave, Cupertino — AR, Store, Dachterrasse',c:'#16a34a'},
+      {t:'10:40',n:'Apple Infinite Loop (Fotostopp)',d:'1 Infinite Loop — ikonisches Schild',c:'#16a34a'},
+      {t:'11:00',n:'Google Visitor Experience',d:'2000 N Shoreline Blvd, Mountain View — kostenlos!',c:'#ea580c'},
+      {t:'12:15',n:'Mittagessen Castro Street',d:'Mountain View — viele gute Restaurants',c:'#64748b'},
+      {t:'13:30',n:'Computer History Museum',d:'1401 N Shoreline Blvd — $21,50/Erw. — Mi–So 10–17',c:'#7c3aed'},
+      {t:'15:30',n:'HP Garage / Stanford / Sand Hill Rd',d:'Durchfahrt-Tour: Birthplace of SV, Campus, VC Alley',c:'#1e40af'},
+      {t:'17:00',n:'Meta/Facebook Schild',d:'1 Meta Way, Menlo Park — Daumen-hoch Fotostopp',c:'#0891b2'},
+      {t:'18:30',n:'Abendessen bei Kathrin',d:'Zurück nach Los Altos',c:'#64748b'},
+    ],
+    cards:[
+      {emoji:'🍎',title:'Apple Park Visitor Center',body:'<p>Das Besucherzentrum ist ein architektonisches Highlight! AR-Erlebnis mit iPad, auf dem ihr das Hauptgebäude erkunden könnt. Auf der Dachterrasse habt ihr den besten Blick auf den „Spaceship"-Campus.</p><p>Der Apple Store hier hat exklusive Merchandise-Artikel, die es nirgendwo sonst gibt!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Apple+Park+Visitor+Center&ll=37.3327,-122.0053'},{text:'Website',url:'https://www.apple.com/retail/appleparkvisitorcenter/'}]},
+      {emoji:'🔍',title:'Google Visitor Experience',body:'Seit 2023 hat Google ein offizielles Besucherzentrum! Interaktive Ausstellung, Google-Store mit exklusiven Produkten. Kostenlos, aber Timeslot vorher online reservieren!',links:[{text:'Reservierung',url:'https://visitorgallery.withgoogle.com'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Google+Visitor+Experience&ll=37.4042,-122.0776'}]},
+      {emoji:'🖥️',title:'Computer History Museum',cls:'p',body:'<p>DAS Tech-Museum weltweit! Von Abakus bis AI. Der Bereich über die Entstehung des Silicon Valley ist einzigartig. Mika wird die Retro-Computer lieben!</p><p>💡 Side-Fact: Hier steht ein Original Apple I — nur 200 Stück wurden je gebaut, heute $500.000+ wert!</p>',links:[{text:'Tickets',url:'https://computerhistory.org/visit/'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Computer+History+Museum&ll=37.4143,-122.0771'}]},
+      {emoji:'🏠',title:'Steve Jobs Garage',body:'2066 Crist Drive — hier gründeten Steve Jobs und Steve Wozniak 1976 Apple. Das Haus gehört jetzt Jobs\' Schwester Patty. Nur von außen fotografieren! Fun Fact: HP lehnte den Apple I ab, bevor Jobs ihn hier baute.'},
+    ],
+    spots:[
+      {name:'Steve Jobs Garage',lat:37.3319,lng:-122.0292,emoji:'🏠',color:'#1e40af'},
+      {name:'Apple Park Visitor Center',lat:37.3327,lng:-122.0053,emoji:'',color:'#16a34a'},
+      {name:'Apple Infinite Loop',lat:37.3318,lng:-122.0312,emoji:'',color:'#16a34a'},
+      {name:'Google Visitor Experience',lat:37.4042,lng:-122.0776,emoji:'🔍',color:'#ea580c'},
+      {name:'Computer History Museum',lat:37.4143,lng:-122.0771,emoji:'🖥️',color:'#7c3aed'},
+      {name:'HP Garage',lat:37.4419,lng:-122.1603,emoji:'🔧',color:'#1e40af'},
+      {name:'Stanford',lat:37.4275,lng:-122.1697,emoji:'🎓',color:'#1e40af'},
+      {name:'Meta',lat:37.4848,lng:-122.1484,emoji:'👍',color:'#0891b2'},
+    ],
+    options:[
+      {title:'Option: Intel Museum',desc:'Santa Clara, Mo–Fr 9–17, kostenlos. 45–60 Min. Interaktive Chipfertigung.'},
+      {title:'Option: The Tech Interactive',desc:'San Jose, ab $36. Hands-on Science Museum, IMAX. Gut für Mika bei Regen.'},
+    ]
+  },
+  {
+    date:'2026-04-01', num:3, wd:'Mi', label:'1.4.', title:'Tech Tour + Alcatraz',
+    color:'#7c2d12', desc:'Vormittag Tech-Spots, nachmittags Alcatraz 15:50',
+    timeline:[
+      {t:'09:00',n:'Restliche Tech-Spots',d:'Was gestern nicht geschafft wurde',c:'#1e40af'},
+      {t:'12:30',n:'Mittagessen',d:'Unterwegs / Mountain View',c:'#64748b'},
+      {t:'13:15',n:'Abfahrt → San Francisco',d:'~60 Min. nach Pier 33 (Verkehr!)',c:'#ea580c'},
+      {t:'14:30',n:'Ankunft Pier 33, Einchecken',d:'Embarcadero & Bay St — 30 Min. vorher da sein!',c:'#ea580c'},
+      {t:'15:50',n:'Alcatraz-Fähre',d:'Day Tour — ca. 2,5 Std. auf der Insel',c:'#dc2626'},
+      {t:'~18:30',n:'Zurück am Pier',d:'Optional: Fisherman\'s Wharf / Pier 39',c:'#7c3aed'},
+      {t:'~20:30',n:'Rückfahrt Los Altos',d:'Abendessen bei Kathrin',c:'#64748b'},
+    ],
+    cards:[
+      {emoji:'🏝️',title:'Alcatraz — The Rock',cls:'r',body:'<p>Die berühmteste Gefängnisinsel der Welt! Der Audio-Guide (im Preis enthalten) ist fantastisch — erzählt von echten Häftlingen und Wärtern. Dauer auf der Insel: ~2-2,5 Stunden.</p><p>💡 Side-Fact: 1962 versuchten 3 Häftlinge die Flucht durch einen selbstgegrabenen Tunnel. Ob sie überlebten, ist bis heute ungeklärt!</p><p>⚠️ WICHTIG: Tickets sind NUR vorab buchbar und oft Wochen vorher ausverkauft!</p>',links:[{text:'Tickets',url:'https://www.alcatrazcruises.com'},{text:'Apple Maps Pier 33',url:'https://maps.apple.com/?q=Pier+33+Alcatraz&ll=37.8087,-122.4098'}]},
+      {emoji:'🦞',title:'Fisherman\'s Wharf',body:'Nach Alcatraz lohnt sich ein Bummel: Pier 39 mit den berühmten Seelöwen, Clam Chowder in einer Brotschüssel (Boudin Bakery), und der Blick auf die Golden Gate Bridge. Touristisch, aber für den ersten SF-Besuch ein Muss!',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Fishermans+Wharf&ll=37.8080,-122.4177'}]},
+    ],
+    spots:[
+      {name:'Pier 33 / Alcatraz',lat:37.8087,lng:-122.4098,emoji:'🏝️',color:'#dc2626'},
+      {name:'Fisherman\'s Wharf',lat:37.8080,lng:-122.4177,emoji:'🦞',color:'#7c3aed'},
+    ],
+    options:[]
+  },
+  {
+    date:'2026-04-02', num:4, wd:'Do', label:'2.4.', title:'WoMo → Monterey',
+    color:'#065f46', desc:'Erster WoMo-Tag! Los Altos → Monterey (2–2,5 Std.)',
+    timeline:[
+      {t:'08:00',n:'WoMo startklar machen',d:'Wasser, Proviant, Schränke sichern',c:'#065f46'},
+      {t:'08:30',n:'Abschied von Kathrin & Damian',d:'Danke sagen!',c:'#dc2626'},
+      {t:'09:00',n:'Abfahrt Richtung Süden',d:'US-101 S → CA-156 W → CA-1 S (120 km)',c:'#065f46'},
+      {t:'~11:00',n:'Ankunft Monterey — RV-Park einchecken',d:'Fairgrounds RV Park: Hookup anschließen',c:'#16a34a'},
+      {t:'12:00',n:'Mittagessen Cannery Row',d:'Fish Hopper / Louie Linguini\'s / Bubba Gump',c:'#ea580c'},
+      {t:'13:30',n:'Monterey Bay Aquarium',d:'$59.95 + $49.95 + $49.95 = $159.85 (NUR ONLINE!)',c:'#0891b2'},
+      {t:'~16:30',n:'Cannery Row bummeln',d:'Seelöwen, Souvenirs, Steinbeck-Atmosphäre',c:'#7c3aed'},
+      {t:'18:00',n:'Zurück zum WoMo',d:'Erster Abend selbst kochen!',c:'#065f46'},
+    ],
+    cards:[
+      {emoji:'🚐',title:'Erster WoMo-Tag!',cls:'o',body:'<p>Checkliste vor der Abfahrt: Wasser aufgefüllt? Schränke gesichert? Kühlschrank-Verschluss zu? Antenne eingefahren?</p><p>⚠️ RV-Maße merken: ~7-8m lang, 2m breit, Alkoven. An Tankstellen, Durchfahrtshöhen und enge Straßen denken!</p>'},
+      {emoji:'🐙',title:'Monterey Bay Aquarium',cls:'c',body:'<p>Eines der besten Aquarien der Welt! Highlights: Open Sea Tank (Haie, Thunfisch, Schildkröten), Kelp Forest (10m hohes Seetang-Becken), Sea Otters (die Lieblinge aller Besucher!).</p><p>💡 Side-Fact: Das Aquarium war Drehort für Star Trek IV — hier wurden die Buckelwal-Szenen gedreht!</p><p>⏱️ Plant mindestens 2-3 Stunden ein. Am besten gleich morgens, bevor die Schulgruppen kommen.</p>',links:[{text:'Tickets (NUR ONLINE!)',url:'https://www.montereybayaquarium.org/visit/admission-tickets'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Monterey+Bay+Aquarium&ll=36.6183,-121.9018'}]},
+    ],
+    spots:[
+      {name:'Monterey Bay Aquarium',lat:36.6183,lng:-121.9018,emoji:'🐙',color:'#0891b2'},
+      {name:'Cannery Row',lat:36.6160,lng:-121.8984,emoji:'🏘️',color:'#7c3aed'},
+      {name:'Fairgrounds RV Park',lat:36.5975,lng:-121.8555,emoji:'🚐',color:'#16a34a'},
+      {name:'Marina Dunes RV Park',lat:36.6922,lng:-121.8104,emoji:'🏖️',color:'#065f46'},
+    ],
+    options:[
+      {title:'Option: Meta-Schild Fotostopp',desc:'1 Meta Way, Menlo Park — nur 5 Min. Umweg am Anfang, falls gestern nicht geschafft.'},
+      {title:'Option: Gilroy Outlets',desc:'Premium Outlets an der US-101. Kurzer Shopping-Stopp auf dem Weg.'},
+    ]
+  },
+  {
+    date:'2026-04-03', num:5, wd:'Fr', label:'3.4.', title:'Aquarium → 17-Mile → Big Sur',
+    color:'#065f46', desc:'Monterey Bay Aquarium, 17-Mile Drive, Highway 1 nach Big Sur',
+    timeline:[
+      {t:'09:00',n:'Abfahrt Monterey, Wasser+Benzin voll!',d:'',c:'#065f46'},
+      {t:'10:00',n:'Monterey Bay Aquarium, 886 Cannery Row',d:'$159.85 (NUR ONLINE!)',c:'#0891b2'},
+      {t:'12:30',n:'Lunch, Cannery Row oder RV',d:'',c:'#64748b'},
+      {t:'13:15',n:'17-Mile Drive, Pacific Grove Gate',d:'$12.50/Fahrzeug',c:'#1e3a5f'},
+      {t:'15:30',n:'Abfahrt → Big Sur, Highway 1 South',d:'',c:'#065f46'},
+      {t:'16:00',n:'Bixby Bridge, Pullouts beidseitig',d:'DAS Foto!',c:'#ea580c'},
+      {t:'16:45',n:'McWay Falls, Julia Pfeiffer Burns SP, 800m Trail',d:'',c:'#0891b2'},
+      {t:'17:30',n:'Pfeiffer Big Sur State Park, Campground einchecken ($55)',d:'',c:'#16a34a'},
+    ],
+    cards:[
+      {emoji:'🐙',title:'Aquarium Tickets',cls:'r',body:'<p><strong>$59.95 + $49.95 + $49.95 = $159.85</strong> — NUR ONLINE buchbar!</p><p>Öffnungszeiten: 10:00 - 17:00. RV-Parking: Waterfront Lot, $22/Tag.</p><p>Tel: +1-831-648-4800</p>',links:[{text:'Tickets buchen',url:'https://www.montereybayaquarium.org/visit/admission-tickets'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Monterey+Bay+Aquarium&ll=36.6183,-121.9018'}]},
+      {emoji:'🌊',title:'17-Mile Drive',body:'<p>Eine der schönsten Küstenstraßen der Welt! $12.50 Eintritt pro Fahrzeug, RV erlaubt.</p><p><strong>Top-Stopps:</strong> Lone Cypress (das Wahrzeichen, 250+ Jahre alt), Bird Rock (Seelöwen-Kolonie), Ghost Trees (wind-geformte Zypressen), Cypress Point (Panorama).</p><p>💡 Side-Fact: Der Lone Cypress ist der meistfotografierte Baum der Welt und steht unter Markenrecht!</p><p>⏱️ Dauer: ~2h mit Fotostopps</p>',links:[{text:'Pacific Grove Gate',url:'https://maps.apple.com/?q=Pacific+Grove+Gate+17+Mile+Drive&ll=36.6263,-121.9165'}]},
+      {emoji:'📸',title:'Bixby Bridge',cls:'o',body:'<p>DAS ikonische Big-Sur-Foto! Die 218m lange Bogenbrücke wurde 1932 gebaut und ist eine der meistfotografierten Brücken der Welt.</p><p>💡 Side-Fact: Bei der Eröffnung war es die höchste einbogige Betonbrücke der Welt. Instagram-Stars haben hier schon den Verkehr blockiert — seid besser als die!</p><p>Pullouts auf beiden Seiten. Nördlicher Pullout hat den besten Blick.</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Bixby+Bridge&ll=36.3714,-121.9017'}]},
+      {emoji:'💧',title:'McWay Falls',cls:'c',body:'McWay Falls ist ein 24m hoher Wasserfall, der direkt auf einen Sandstrand fällt — einer von nur zwei solcher Fälle in Kalifornien! Der Overlook Trail ist nur 800m und rollstuhlgerecht. Der Strand selbst ist nicht zugänglich (zum Schutz).',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=McWay+Falls&ll=36.1581,-121.6726'}]},
+      {emoji:'🏕️',title:'Übernachtung Pfeiffer Big Sur SP',cls:'g',body:'<p><strong>$50-60/Nacht</strong> | RV-Limit: 32ft (euer 23-26ft passt!)</p><p>Riesige Redwoods direkt am Campground. Tel: (831) 667-2315</p><p>Backup: Big Sur Campground & Cabins ($75+, bis 40ft)</p>',links:[{text:'Reservierung',url:'https://www.reservecalifornia.com'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Pfeiffer+Big+Sur+State+Park&ll=36.2500,-121.7833'}]},
+      {emoji:'⚠️',title:'Big Sur mit RV — Sicherheit',cls:'r',body:'<p>Highway 1 mit eurem 7-8m Class C ist machbar — bis Julia Pfeiffer Burns kein Problem. Tausende RVs fahren jedes Jahr diese Strecke.</p><p><strong>Regeln:</strong> Turnouts für schnellere Autos nutzen! Motorbremse in Gefällen verwenden. Enge Kurven = langsam!</p><p>❌ NICHT nach Pfeiffer Beach fahren — Sycamore Canyon Road ist einspurig, 3.5 km, kein RV!</p>'},
+    ],
+    spots:[
+      {name:'Monterey Bay Aquarium',lat:36.6183,lng:-121.9018,emoji:'🐙',color:'#0891b2'},
+      {name:'17-Mile Drive Eingang',lat:36.6263,lng:-121.9165,emoji:'🛣️',color:'#1e3a5f'},
+      {name:'Bixby Bridge',lat:36.3714,lng:-121.9017,emoji:'📸',color:'#ea580c'},
+      {name:'McWay Falls',lat:36.1581,lng:-121.6726,emoji:'💧',color:'#0891b2'},
+      {name:'Pfeiffer Big Sur SP',lat:36.2500,lng:-121.7833,emoji:'🏕️',color:'#16a34a'},
+    ],
+    options:[
+      {title:'⚠️ Big Sur mit RV: 23-26ft Class C machbar.',desc:'Enge Kurven, Klippen, Turnouts nutzen! NICHT nach Pfeiffer Beach fahren (einspurig, kein RV!)'},
+      {title:'Backup: Big Sur Campground & Cabins',desc:'($75+, bis 40ft) falls Pfeiffer voll'},
+    ]
+  },
+  {
+    date:'2026-04-04', num:6, wd:'Sa', label:'4.4.', title:'Big Sur Wandern → Pismo Beach',
+    color:'#92400e', desc:'Pfeiffer Falls, Partington Cove, Elephant Seals, SLO, Pismo Beach',
+    timeline:[
+      {t:'08:00',n:'🥾 Pfeiffer Falls Trail',d:'3,2km roundtrip, 45-60 Min, Wasserfall im Redwood-Wald',c:'#16a34a'},
+      {t:'09:15',n:'Auschecken, RV startklar',d:'Tanks prüfen, alles sichern',c:'#92400e'},
+      {t:'09:45',n:'🏔️ Partington Cove Trail',d:'Hwy 1 Pullout, 1,9km, 40-50 Min, Tunnel + Bucht!',c:'#065f46'},
+      {t:'10:45',n:'Weiterfahrt Hwy 1 Süd',d:'Spektakuläre Küstenstraße, Stopps einplanen',c:'#92400e'},
+      {t:'11:15',n:'🏖️ Sand Dollar Beach',d:'Längster Strand in Big Sur! Stopp 20 Min, $10 Parking',c:'#0891b2'},
+      {t:'12:00',n:'🐘 Elephant Seal Vista Point',d:'PFLICHT! Hunderte See-Elefanten, 30 Min, großer Parkplatz',c:'#ea580c'},
+      {t:'12:45',n:'🏰 Hearst Castle Fotostopp',d:'Von außen, 5 Min',c:'#7c3aed'},
+      {t:'13:30',n:'🫧 Bubblegum Alley SLO',d:'733 Higuera St, 15 Min',c:'#ea580c'},
+      {t:'14:00',n:'🍜 Lunch: Splash Café Pismo',d:'Berühmte Clam Chowder!',c:'#64748b'},
+      {t:'15:00',n:'🏖️ Pismo Beach + Pier',d:'Strand, Spaziergang, entspannen',c:'#0891b2'},
+      {t:'17:00',n:'🏕️ Stellplatz beziehen',d:'Pismo Coast Village RV o.ä.',c:'#16a34a'},
+      {t:'18:30',n:'🌅 Sonnenuntergang am Pier',d:'Perfekter Tagesabschluss',c:'#ea580c'},
+    ],
+    cards:[
+      {emoji:'🥾',title:'Pfeiffer Falls Trail',cls:'g',body:'<p><strong>Start:</strong> Trailhead beim Pfeiffer Big Sur Lodge-Parkplatz (im State Park)</p><p><strong>Distanz:</strong> 3,2 km (2 Mi) roundtrip | <strong>Dauer:</strong> 45-60 Min</p><p><strong>Schwierigkeit:</strong> Leicht bis moderat, 60m Höhenunterschied</p><p>18m hoher Wasserfall durch Redwood- und Eichenwald. Im April mit guter Wassermenge!</p><p><strong>Parking:</strong> 2 Parkplätze am Trailhead — FRÜH los (8 Uhr)! $10/Fahrzeug oder im Camping inkl.</p><p>💡 Tipp: Valley View Trail als Verlängerung (+1 km) für Panoramablick!</p>',links:[{text:'Apple Maps Trailhead',url:'https://maps.apple.com/?q=Pfeiffer+Falls+Trail&ll=36.2500,-121.7833'},{text:'AllTrails',url:'https://www.alltrails.com/trail/us/california/pfeiffer-falls-trail'}]},
+      {emoji:'🏔️',title:'Partington Cove Trail',cls:'c',body:'<p><strong>Start:</strong> Pullout an Hwy 1, 2 Meilen nördlich Julia Pfeiffer Burns SP</p><p><strong>GPS:</strong> 36.1770, -121.6937</p><p><strong>Distanz:</strong> 1,9 km (1,2 Mi) roundtrip | <strong>Dauer:</strong> 40-50 Min</p><p><strong>Schwierigkeit:</strong> Moderat (steil bergab → steil bergauf zurück!)</p><p>Steiler Pfad hinunter, über eine Holzbrücke, durch einen Tunnel zur geschützten Bucht. Spektakulär!</p><p><strong>Parking:</strong> Highway-Pullout, RV passt — VORSICHTIG einparken. Beide Straßenseiten möglich.</p><p>⚠️ Gratis, kein Eintritt!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Partington+Cove&ll=36.1770,-121.6937'},{text:'AllTrails',url:'https://www.alltrails.com/trail/us/california/partington-cove-trail'}]},
+      {emoji:'🐘',title:'Elephant Seal Vista Point — PFLICHT!',cls:'o',body:'<p><strong>Hunderte riesige See-Elefanten direkt am Strand!</strong> Holzsteg führt ganz nah ran. Bullen können über 2 Tonnen wiegen!</p><p>Im April: Junge Tiere und Weibchen, mausernde Jungtiere. Nicht so voll wie im Winter.</p><p><strong>Parking:</strong> Großer kostenloser Parkplatz, RV kein Problem!</p><p>💡 Mika wird die Viecher lieben!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Elephant+Seal+Vista+Point&ll=35.6625,-121.2570'}]},
+      {emoji:'🏰',title:'Hearst Castle (Fotostopp)',cls:'p',body:'<p>Das märchenhafte Schloss von Medienmogul William Randolph Hearst.</p><p>💡 Side-Fact: Hearst hatte einen privaten Zoo mit Zebras — die Nachkommen leben noch wild an der Küste!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Hearst+Castle&ll=35.6852,-121.1682'}]},
+      {emoji:'🫧',title:'Bubblegum Alley SLO',body:'<p>Gasse komplett mit Kaugummi beklebt seit den 1960ern! 733 Higuera St. Instagram-Pflicht!</p><p>💡 SLO = eine der glücklichsten Städte der USA (National Geographic)</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Bubblegum+Alley+San+Luis+Obispo&ll=35.2800,-120.6596'}]},
+      {emoji:'🍜',title:'Splash Café — Clam Chowder!',cls:'o',body:'<p>Berühmteste Clam Chowder der Central Coast! 197 Pomeroy Ave, Pismo Beach. In einer Brotschüssel serviert. Oft Schlange, aber lohnt sich!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Splash+Cafe+Pismo+Beach&ll=35.1432,-120.6408'}]},
+      {emoji:'🏕️',title:'Übernachtung Pismo Beach',cls:'g',body:'<p><strong>🥇 Pismo Coast Village RV</strong> $70-90 — 400 Sites, Full Hookups, Pool, am Strand. Tel: (805) 773-1811</p><p><strong>🥈 Pismo Sands RV (Oceano)</strong> $55-75 — moderner, ruhiger</p><p><strong>🥉 Coastal Dunes RV (Oceano)</strong> $45-55 — County Park, günstig</p><p><strong>💡 Gratis: Walmart Arroyo Grande</strong> — Manager fragen! 15 Min von Pismo</p><p><strong>💡 Gratis: Morro Bay Hafen</strong> (park4night) — ruhig, 3 Tage erlaubt</p>',links:[{text:'Pismo Coast Village',url:'https://www.visitpcv.com'},{text:'Apple Maps Pismo RV',url:'https://maps.apple.com/?q=Pismo+Coast+Village+RV&ll=35.1318,-120.6320'}]},
+    ],
+    spots:[
+      {name:'Pfeiffer Falls Trail',lat:36.2500,lng:-121.7833,emoji:'🥾',color:'#16a34a'},
+      {name:'Partington Cove',lat:36.1770,lng:-121.6937,emoji:'🏔️',color:'#065f46'},
+      {name:'Sand Dollar Beach',lat:35.9241,lng:-121.4723,emoji:'🏖️',color:'#0891b2'},
+      {name:'Elephant Seal Vista',lat:35.6625,lng:-121.2570,emoji:'🐘',color:'#ea580c'},
+      {name:'Hearst Castle',lat:35.6852,lng:-121.1682,emoji:'🏰',color:'#7c3aed'},
+      {name:'Bubblegum Alley SLO',lat:35.2800,lng:-120.6596,emoji:'🫧',color:'#ea580c'},
+      {name:'Pismo Beach Pier',lat:35.1425,lng:-120.6414,emoji:'🏖️',color:'#0891b2'},
+    ],
+    options:[
+      {title:'💡 Hwy 1 Bonus-Stopps',desc:'Limekiln State Park (Kalköfen im Redwood), Jade Cove (echte Jade finden!), Ragged Point (letzter Big-Sur-Blick + Restaurant)'},
+    ]
+  },
+  {
+    date:'2026-04-05', num:7, wd:'So', label:'5.4.', title:'Arroyo Hondo → SB → LA',
+    color:'#7c2d12', desc:'Vista Point → Santa Barbara → US-101 → Dockweiler Beach (⚠️ NUR 101, kein PCH!)',
+    timeline:[
+      {t:'08:00',n:'Aufwachen am Arroyo Hondo Vista Point',d:'Kaffee kochen, Blick aufs Meer genießen',c:'#ea580c'},
+      {t:'08:45',n:'Abfahrt → Santa Barbara',d:'25 km auf Hwy 101 Ost (~25 Min)',c:'#065f46'},
+      {t:'09:15',n:'Santa Barbara: Garden Street Lot (Lot 6) parken',d:'6 RV-Plätze! Dann Funk Zone + Stearns Wharf zu Fuß',c:'#7c3aed'},
+      {t:'11:00',n:'Abfahrt → Ventura',d:'US-101 South (~35 Min)',c:'#065f46'},
+      {t:'11:35',n:'Lunch-Stopp: In-N-Out Burger Ventura',d:'2100 E Harbor Blvd — Mika\'s erstes Mal!',c:'#ea580c'},
+      {t:'12:20',n:'Abfahrt → Los Angeles',d:'US-101 S → 405 S (~1:45, Sonntag-Traffic!)',c:'#065f46'},
+      {t:'14:00',n:'Grocery-Stopp El Segundo',d:'Ralph\'s/Sprouts: S\'mores, Getränke, Snacks',c:'#1e40af'},
+      {t:'14:30',n:'Ankunft Dockweiler Beach RV Park',d:'Einchecken, Fire Ring claimen!',c:'#16a34a'},
+      {t:'15:00',n:'Strand, Flugzeuge gucken, relaxen',d:'Flugzeuge landen direkt über euch (LAX!)',c:'#0891b2'},
+      {t:'19:00',n:'S\'mores am Lagerfeuer 🔥',d:'Sonnenuntergang über dem Pazifik',c:'#ea580c'},
+    ],
+    cards:[
+      {emoji:'🌅',title:'Arroyo Hondo Vista Point',body:'<p>Kostenloser Übernachtungsspot direkt am Hwy 101, ~25 km westlich von Santa Barbara. Offiziell 8h Parklimit, Overnight aber geduldet.</p><p>⚠️ Keine Toiletten, kein Wasser — nur der Blick aufs Meer und die Stille!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Arroyo+Hondo+Vista+Point&ll=34.4723,-119.8744'}]},
+      {emoji:'🌴',title:'Santa Barbara — Parking & Tipps',body:'<p>Das „amerikanische Riviera"! Weiße spanische Kolonialarchitektur, Palmen, mediterrane Atmosphäre.</p><p>🅿️ <strong>Garden Street Lot (Lot 6)</strong> — einer von nur 4 offiziellen RV-Lots in SB! 6 gelb markierte Oversized-Plätze. 90 Min frei, dann $3/Std (max $20/Tag). Direkt an der Funk Zone!</p><p><strong>Stearns Wharf:</strong> ~10 Min zu Fuß. Ältester Holz-Pier der Westküste (1872).</p><p><strong>Funk Zone:</strong> 2-3 Min vom Lot! Craft Beer, Weinbars, Street Art.</p><p>🌮 <strong>Lilly\'s Taqueria</strong> — authentische mexikanische Tacos, von Locals geliebt!</p><p>⚠️ SB ist STRENG mit großen Fahrzeugen (Ordinance seit 2017)! NUR in ausgewiesenen Lots parken, sonst Strafzettel!</p><p>Backup: Leadbetter Lot (ebenfalls Oversized erlaubt, weiter nördlich)</p>',links:[{text:'Garden St Lot',url:'https://maps.apple.com/?q=Garden+Street+Parking+Lot+Santa+Barbara&ll=34.4140,-119.6870'},{text:'Stearns Wharf',url:'https://maps.apple.com/?q=Stearns+Wharf+Santa+Barbara&ll=34.4098,-119.6855'},{text:'SB Parking Info',url:'https://santabarbaraca.gov/things-do/waterfront/parking-services/oversized-vehicle-parking-lots'}]},
+      {emoji:'🍔',title:'In-N-Out Burger',cls:'o',body:'<p><strong>Kalifornien-Klassiker!</strong> DAS Fast-Food-Erlebnis an der Westküste.</p><p>Geheimtipp: „Animal Style" bestellen (Senf-gegrilltes Patty, extra Pickles, gegrillte Zwiebeln). Shake nicht vergessen!</p><p>💡 Side-Fact: In-N-Out gibt es NUR in wenigen US-Staaten — ein echtes Kalifornien-Erlebnis!</p>',links:[{text:'Apple Maps Ventura',url:'https://maps.apple.com/?q=In-N-Out+Burger+Ventura&ll=34.2675,-119.2290'}]},
+      {emoji:'⚠️',title:'WICHTIG: Route & Verkehr',cls:'r',body:'<p><strong>🚫 KEIN PCH/Malibu!</strong> Der Pacific Coast Highway ist für euer 7-8m Wohnmobil zu eng — enge Kurven, steile Grades, kein Ausweichen möglich.</p><p><strong>✅ Immer US-101 → 405 nehmen!</strong> Sicher, breiter, schneller.</p><p><strong>🕐 Sonntag-Traffic:</strong> Schlimmste Zeit 12:45-15:00 Uhr. Plant 1 Stunde Puffer ein!</p>'},
+      {emoji:'🏕️',title:'Dockweiler Beach RV Park (2 Nächte)',cls:'g',body:'<p><strong>$50-75/Nacht</strong> | 118 Sites, Full Hookups (50 Amp!)</p><p>DIREKT am Strand — einer der wenigen RV-Parks direkt am Meer in LA! Lagerfeuer am Strand erlaubt (Fire Rings = first-come, bis 15 Uhr da sein!).</p><p>💡 Side-Fact: Direkt neben LAX — Flugzeuge landen über euch! Spektakulär nachts.</p><p>💳 Nur Kartenzahlung, kein Bargeld.</p><p>⚠️ <strong>OSTERWOCHE = SOFORT BUCHEN!</strong> Anrufen: (310) 322-4951 oder (800) 950-7275</p>',links:[{text:'Buchung',url:'https://dockweilerrvpark.com'},{text:'Tel: (310) 322-4951',url:'tel:+13103224951'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Dockweiler+RV+Park&ll=33.9232,-118.4398'}]},
+      {emoji:'🛒',title:'Grocery-Stopp El Segundo',body:'<p>Letzter großer Supermarkt vor Dockweiler! Unbedingt holen:</p><p>☐ Marshmallows (große!)</p><p>☐ Graham Crackers</p><p>☐ Hershey\'s Schokolade</p><p>☐ Getränke, Snacks, Wasser</p><p>☐ Holzkohle/Feuerholz (oder am Strand kaufen)</p><p>= S\'mores am Lagerfeuer! 🔥</p>',links:[{text:'Ralph\'s El Segundo',url:'https://maps.apple.com/?q=Ralphs+El+Segundo&ll=33.9170,-118.4040'}]},
+    ],
+    spots:[
+      {name:'Arroyo Hondo Vista Point',lat:34.4723,lng:-119.8744,emoji:'🌅',color:'#ea580c'},
+      {name:'Garden St Lot 6 (RV!)',lat:34.4140,lng:-119.6870,emoji:'🅿️',color:'#1e40af'},
+      {name:'Stearns Wharf',lat:34.4098,lng:-119.6855,emoji:'🏰',color:'#7c3aed'},
+      {name:'In-N-Out Ventura',lat:34.2675,lng:-119.2290,emoji:'🍔',color:'#ea580c'},
+      {name:'Dockweiler Beach RV Park',lat:33.9232,lng:-118.4398,emoji:'🚐',color:'#16a34a'},
+    ],
+    options:[
+      {title:'⚠️ Falls Dockweiler voll',desc:'Bolsa Chica State Beach (Huntington Beach, $65/N, Hookups) | Walmart Torrance (gratis, Notlösung) | Online: marvin.lacounty.gov suche „Dockweiler"'},
+    ]
+  },
+  {
+    date:'2026-04-06', num:8, wd:'Mo', label:'6.4.', title:'LA Sightseeing',
+    color:'#1e1b4b', desc:'Venice Beach, Santa Monica Pier, Hollywood, Griffith Observatory',
+    timeline:[
+      {t:'09:00',n:'RV auf Dockweiler lassen!',d:'Mit Uber in die Stadt',c:'#ea580c'},
+      {t:'09:30',n:'Venice Beach, Muscle Beach, Skate Park',d:'',c:'#0891b2'},
+      {t:'11:00',n:'Santa Monica Pier, Pacific Park Riesenrad',d:'',c:'#ea580c'},
+      {t:'12:30',n:'3rd Street Promenade, Mittagessen',d:'',c:'#64748b'},
+      {t:'14:00',n:'Hollywood Boulevard, Walk of Fame, TCL Chinese Theatre',d:'',c:'#1e40af'},
+      {t:'15:30',n:'Griffith Observatory',d:'Kostenlos! Gratis Shuttle oder Uber',c:'#16a34a'},
+      {t:'17:00',n:'Sunset am Observatory, Blick auf LA + Hollywood Sign',d:'',c:'#ea580c'},
+      {t:'19:00',n:'Zurück Dockweiler, Abendessen am Strand',d:'',c:'#092e4f'},
+    ],
+    cards:[
+      {emoji:'🏄',title:'Venice Beach',body:'<p>Boardwalk-Kultur pur! Muscle Beach (Freiluft-Fitnessstudio seit 1934), Skatepark (Weltberühmt — Mika wird begeistert sein!), Straßenkünstler, verrückte Charaktere.</p><p>💡 Side-Fact: Arnold Schwarzenegger trainierte hier in den 70ern. Der Skatepark wurde von Skatelegende Jay Adams inspiriert.</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Venice+Skate+Park&ll=33.9862,-118.4724'}]},
+      {emoji:'🎡',title:'Santa Monica Pier',cls:'o',body:'<p>Das Ende der legendären Route 66! Pacific Park Vergnügungspark mit Riesenrad (tolles Foto bei Sonnenuntergang). Rides ab $5.</p><p>3rd Street Promenade: Open-Air-Einkaufsstraße mit Straßenkünstlern — 5 Min zu Fuß vom Pier.</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Santa+Monica+Pier&ll=34.0094,-118.4973'}]},
+      {emoji:'⭐',title:'Hollywood Boulevard',body:'<p>Walk of Fame: 2.700+ Sterne auf dem Bürgersteig. TCL Chinese Theatre: Handabdrücke der Stars im Beton.</p><p>💡 Side-Fact: Der Hollywood-Schriftzug oben auf dem Berg hieß ursprünglich „Hollywoodland" und war Werbung für eine Immobilien-Siedlung (1923)!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Hollywood+Walk+of+Fame&ll=34.1016,-118.3411'}]},
+      {emoji:'🔭',title:'Griffith Observatory',cls:'g',body:'<p><strong>GRATIS!</strong> Bester Panoramablick über ganz LA mit Hollywood Sign. Planetarium: $7/Person — lohnt sich für Weltraum-Fans (Mika?).</p><p>💡 Side-Fact: Drehort von „La La Land" und „Rebel Without a Cause" (James Dean).</p><p>Parkplatz oben oft voll → DASH-Shuttle (gratis!) oder Uber direkt hin.</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Griffith+Observatory&ll=34.1184,-118.3004'},{text:'Website',url:'https://griffithobservatory.org'}]},
+      {emoji:'💡',title:'Transport-Tipp LA',cls:'o',body:'<p>⚠️ RV auf Dockweiler lassen! Mit Uber/Lyft in die Stadt (~$25-30 pro Strecke).</p><p>LA Traffic: 7-10 Uhr + 16-19 Uhr vermeiden — sonst steht ihr ewig!</p>'},
+    ],
+    spots:[
+      {name:'Venice Beach',lat:33.9862,lng:-118.4724,emoji:'🏄',color:'#0891b2'},
+      {name:'Santa Monica Pier',lat:34.0094,lng:-118.4973,emoji:'🎡',color:'#ea580c'},
+      {name:'Hollywood Walk of Fame',lat:34.1016,lng:-118.3411,emoji:'⭐',color:'#1e40af'},
+      {name:'Griffith Observatory',lat:34.1184,lng:-118.3004,emoji:'🔭',color:'#16a34a'},
+    ],
+    options:[]
+  },
+  {
+    date:'2026-04-07', num:9, wd:'Di', label:'7.4.', title:'Palm Springs → Joshua Tree',
+    color:'#92400e', desc:'Aerial Tramway, Joshua Tree NP, BLM Campen in der Wüste',
+    timeline:[
+      {t:'07:00',n:'Abfahrt Dockweiler, Richtung Osten',d:'CA-10 E → PS (200 km, ~3 Std.)',c:'#065f46'},
+      {t:'09:45',n:'Ankunft Palm Springs, RV-Parking $15',d:'Lot öffnet 9:00. Tickets kaufen, warten auf 10:00 Öffnung',c:'#16a34a'},
+      {t:'10:00',n:'Palm Springs Aerial Tramway (öffnet 10:00 Di!)',d:'Gondel 10 Min auf 2.596m! Rotierende Kabinen!',c:'#ea580c'},
+      {t:'12:30',n:'Mittagessen oben oder unten',d:'',c:'#64748b'},
+      {t:'13:30',n:'Abfahrt Joshua Tree NP',d:'~2 Std. nach Westeingang',c:'#065f46'},
+      {t:'15:30',n:'Joshua Tree NP Westeingang',d:'$30/Fahrzeug (7 Tage)',c:'#0891b2'},
+      {t:'15:45',n:'Loop-Route: Hidden Valley, Skull Rock, Keys View, Cholla Garden',d:'~3,5 Std. mit Fotostopps',c:'#0891b2'},
+      {t:'~19:00',n:'BLM South Campground — Gratis!',d:'GPS: 33.6740, -115.8071. Autark campen, Sternenhimmel!',c:'#16a34a'},
+    ],
+    cards:[
+      {emoji:'🚡',title:'Palm Springs Aerial Tramway',cls:'o',body:'<p><strong>HIGHLIGHT!</strong> Rotierende Gondel (weltweit einzigartig!) bringt euch in 10 Minuten von der Wüstenhitze auf 2.596m mit Kiefernwald.</p><p><strong>Preise:</strong> $36.95/Erw, ~$111 für euch 3. RV-Parking $15.</p><p>Öffnungszeiten Mo-Fr ab 10:00, Sa/So ab 8:00.</p><p>💡 Side-Fact: Oben kann im April noch Schnee liegen! Mika in Shorts und Schnee = perfektes Fotomotiv! Die Temperaturdifferenz beträgt oft 20-30°C zwischen Station unten und oben.</p>',links:[{text:'Website + Tickets',url:'https://pstramway.com'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Palm+Springs+Aerial+Tramway&ll=33.8333,-116.6142'}]},
+      {emoji:'🌵',title:'Joshua Tree National Park',body:'<p>Zwei Wüsten treffen aufeinander: Mojave (Joshua Trees) und Colorado (Kakteen). Die Joshua Trees sind eigentlich Yucca-Palmen und werden bis zu 15m hoch.</p><p><strong>Eintritt:</strong> $30/Fahrzeug (7 Tage) — am Gate bar oder Karte.</p><p><strong>Route durch den Park (~3,5h):</strong></p><p>1. Hidden Valley (1-Meile Loop, 45 Min) — Fels-Amphitheater</p><p>2. Skull Rock (15 Min) — Totenkopf-Felsen!</p><p>3. Keys View (20 Min) — 1.580m, Blick bis Mexiko!</p><p>4. Cholla Cactus Garden (20 Min) — Teddybär-Kakteen, surreal!</p><p>5. Arch Rock (20 Min) — natürlicher Felsbogen</p><p>💡 Side-Fact: U2 benannten ihr Album „The Joshua Tree" nach diesen Bäumen. Das Album-Coverfoto entstand ganz in der Nähe!</p>',links:[{text:'Apple Maps Westeingang',url:'https://maps.apple.com/?q=Joshua+Tree+National+Park&ll=34.0127,-116.1649'}]},
+      {emoji:'⛺',title:'BLM South — Gratis Wüstennacht',cls:'g',body:'<p><strong>GRATIS!</strong> GPS: 33.6740, -115.8071. Bureau of Land Management (BLM) = öffentliches Land, legal campen!</p><p>Befestigte Schotterpisten, RV aller Größen OK. Feuerringe vorhanden. Max 14 Tage Aufenthalt.</p><p>⭐⭐⭐⭐⭐ Einer der besten Sternenhimmel Kaliforniens! Dark Sky Park!</p><p>⚠️ Kein Wasser, Strom, Toiletten — komplett autark!</p>',links:[{text:'iOverlander',url:'https://app.ioverlander.com/places/7842-joshua-tree'},{text:'Apple Maps',url:'https://maps.apple.com/?q=BLM+Camping+Joshua+Tree+South&ll=33.6740,-115.8071'}]},
+      {emoji:'⚠️',title:'Wüsten-Checkliste',cls:'r',body:'<p>☐ Wassertank VOLL (Oasis Visitor Center = gratis Wasser)</p><p>☐ Benzintank VOLL (kein Gas auf BLM!)</p><p>☐ Essen + Snacks für Abend + Frühstück</p><p>☐ Stirnlampen / Taschenlampen</p><p>☐ Müllbeutel (Leave No Trace!)</p><p>☐ Offline-Karten geladen (kein Empfang!)</p>'},
+    ],
+    spots:[
+      {name:'Palm Springs Aerial Tramway',lat:33.8333,lng:-116.6142,emoji:'🚡',color:'#ea580c'},
+      {name:'Joshua Tree Westeingang',lat:34.0127,lng:-116.1649,emoji:'🌵',color:'#0891b2'},
+      {name:'BLM South Campground',lat:33.6740,lng:-115.8071,emoji:'⛺',color:'#16a34a'},
+    ],
+    options:[]
+  },
+  {
+    date:'2026-04-08', num:10, wd:'Mi', label:'8.4.', title:'Joshua Tree → Bakersfield',
+    color:'#92400e', desc:'Wüsten-Sonnenaufgang, Orange Grove RV Park, letzte Einkäufe vor Yosemite',
+    timeline:[
+      {t:'06:30',n:'Wüsten-Sonnenaufgang, Kaffee, Stille',d:'MAGISCH!',c:'#ea580c'},
+      {t:'08:00',n:'Abfahrt BLM → Bakersfield',d:'I-40 E → I-15 N → CA-58 W (200 km, ~3 Std.)',c:'#065f46'},
+      {t:'11:00',n:'Ankunft Bakersfield, RV-Park einchecken',d:'Orange Grove RV Park oder Walmart',c:'#16a34a'},
+      {t:'12:00',n:'Mittagessen, Relaxen, Wäsche waschen',d:'Pool-Zeit!',c:'#ea580c'},
+      {t:'14:00',n:'Großeinkauf für Yosemite',d:'Safeway/Costco: Proviant, Wasser, Gas (€ billiger hier!)',c:'#1e40af'},
+      {t:'16:00',n:'RV-Service, Check-up',d:'Zustand überprüfen, Reifen? Öl? Alle OK?',c:'#1e40af'},
+      {t:'18:00',n:'Abendessen + früh schlafen',d:'Morgen lange Fahrt nach Yosemite!',c:'#64748b'},
+    ],
+    cards:[
+      {emoji:'🌅',title:'Wüsten-Sonnenaufgang',body:'Aufwachen in der Stille der Mojave-Wüste! Kaffee kochen, den Sonnenaufgang genießen — das wird einer der magischsten Momente der Reise.'},
+      {emoji:'🏕️',title:'Orange Grove RV Park',cls:'g',body:'<p><strong>~$40/Nacht</strong> | Full Hookups, Pool!</p><p>Perfekt zum Erholen nach der Wüste. Wäsche waschen, RV aufräumen, am Pool entspannen.</p><p>Tel: (661) 366-4662</p><p>Backup: Walmart Bakersfield (gratis, vorher Manager fragen!)</p>',links:[{text:'Website',url:'https://www.orangegrovervpark.com'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Orange+Grove+RV+Park+Bakersfield&ll=35.3838,-119.0493'}]},
+      {emoji:'💡',title:'Einkauf-Tipp',cls:'o',body:'Bakersfield = letzter großer Stopp vor Yosemite! In Fresno morgen nochmal möglich, aber Bakersfield hat mehr Auswahl. Tanken hier ist deutlich günstiger als in den Bergen!'},
+    ],
+    spots:[
+      {name:'BLM South',lat:33.6740,lng:-115.8071,emoji:'⛺',color:'#16a34a'},
+      {name:'Orange Grove RV Park',lat:35.3838,lng:-119.0493,emoji:'🏕️',color:'#16a34a'},
+    ],
+    options:[]
+  },
+  {
+    date:'2026-04-09', num:11, wd:'Do', label:'9.4.', title:'Yosemite Tag 1',
+    color:'#065f46', desc:'Bakersfield → Yosemite, Mariposa Grove, Tunnel View, Camping',
+    timeline:[
+      {t:'08:00',n:'Abfahrt Bakersfield',d:'CA-99 N → CA-41 N (300 km, ~5-6 Std.)',c:'#065f46'},
+      {t:'~13:30',n:'Ankunft Yosemite Südeingang',d:'Hwy 41 South',c:'#16a34a'},
+      {t:'13:30',n:'Park Eintritt',d:'$35/Fahrzeug (7 Tage)',c:'#16a34a'},
+      {t:'14:00',n:'Mariposa Grove',d:'Giant Sequoias! 500+ Bäume, 1.800 Jahre alt, 63m hoch',c:'#0891b2'},
+      {t:'15:30',n:'Wawona Campground einchecken',d:'$36/Nacht, RV bis 35ft OK!',c:'#16a34a'},
+      {t:'16:30',n:'Tunnel View',d:'DER Yosemite-Blick! El Capitan, Bridalveil, Half Dome',c:'#ea580c'},
+      {t:'17:30',n:'Rückfahrt Campground, Abendessen',d:'Selbst kochen oder mitgebracht',c:'#64748b'},
+      {t:'19:30',n:'Früh schlafen! Morgen früh Wandern!',d:'',c:'#64748b'},
+    ],
+    cards:[
+      {emoji:'🏞️',title:'Yosemite — WOW-Faktor!',body:'<p>Yosemite Valley ist ein Wunder der Natur. 1 km hohe Granitwände, Wasserfälle die hunderte Meter fallen, uralte Mammutbäume.</p><p><strong>Eintritt:</strong> $35/Fahrzeug (7 Tage).</p><p>⚠️ <strong>Hwy 41 Tunnel:</strong> Clearance 3,1m (10\'2"). Euer RV evtl. zu hoch → Ranger am Eingang fragen! Alternative: Hwy 140 via Merced (kein Tunnel, RV-freundlich).</p><p>⚠️ <strong>Glacier Point Road: GESCHLOSSEN im April!</strong></p><p>💡 Side-Fact: El Capitan wurde 2017 von Alex Honnold OHNE Seil bestiegen — Film „Free Solo"!</p>',links:[{text:'NPS Yosemite',url:'https://www.nps.gov/yose/'},{text:'Conditions',url:'https://www.nps.gov/yose/planyourvisit/conditions.htm'},{text:'Google Maps Route',url:'https://www.google.com/maps/dir/Orange+Grove+RV+Park+Bakersfield/Yosemite+South+Entrance'}]},
+      {emoji:'🌲',title:'Mariposa Grove',cls:'g',body:'<p>Über 500 Giant Sequoias — die größten Lebewesen der Erde! Der „Grizzly Giant" ist ~1.800 Jahre alt und 63m hoch.</p><p>Direkt am Südeingang. Shuttle vom Parkplatz (kostenlos). 2-3 Trails von leicht bis moderat.</p><p>💡 Side-Fact: Sequoias können nur durch Feuer keimen — ihre Zapfen öffnen sich erst bei Hitze!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Mariposa+Grove+Yosemite&ll=37.5147,-119.6113'}]},
+      {emoji:'📸',title:'Tunnel View',body:'<p>DER Yosemite-Blick! Von links nach rechts: El Capitan, Bridalveil Fall, Cathedral Rocks, Half Dome ganz hinten. Ansel Adams machte hier sein berühmtestes Foto.</p><p>Morgens und abends bestes Licht. Im April mit Schnee auf den Gipfeln!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Tunnel+View+Yosemite&ll=37.7157,-119.6769'}]},
+      {emoji:'🏕️',title:'Camping Yosemite',cls:'r',body:'<p><strong>Wawona Campground:</strong> $36/Nacht, RV bis 35ft (ihr passt!). Ruhiger als Valley Camps.</p><p><strong>Hodgdon Meadow:</strong> $36/Nacht, Alternative am Westeingang.</p><p>⚠️ Upper Pines GESCHLOSSEN bis 9.4. (Gefahrenbaumfällung)!</p><p>Falls ausgebucht: Indian Flat RV Park (Hwy 140, $45-60) oder Summerdale CG (First-Come, $30).</p><p>🐻 BÄREN! ALLE Lebensmittel in Bear Lockers! Bären können RV-Türen öffnen!</p>',links:[{text:'Wawona buchen',url:'https://www.recreation.gov/camping/campgrounds/232450'},{text:'Hodgdon buchen',url:'https://www.recreation.gov/camping/campgrounds/232451'}]},
+    ],
+    spots:[
+      {name:'Mariposa Grove',lat:37.5147,lng:-119.6113,emoji:'🌲',color:'#0891b2'},
+      {name:'Tunnel View',lat:37.7157,lng:-119.6769,emoji:'📸',color:'#ea580c'},
+      {name:'Wawona Campground',lat:37.4742,lng:-119.6434,emoji:'🏕️',color:'#16a34a'},
+    ],
+    options:[]
+  },
+  {
+    date:'2026-04-10', num:12, wd:'Fr', label:'10.4.', title:'Yosemite Tag 2',
+    color:'#065f46', desc:'Yosemite Valley: Tunnel View, Falls, Mirror Lake, Mist Trail, Sternenhimmel',
+    timeline:[
+      {t:'06:30',n:'Früher Start! Wawona → Valley',d:'43 km, 45 Min. Valley Shuttle ab 7:00!',c:'#065f46'},
+      {t:'07:45',n:'📸 Tunnel View — DER Yosemite-Blick!',d:'El Capitan + Bridalveil + Half Dome. Morgens bestes Licht!',c:'#ea580c'},
+      {t:'08:15',n:'RV am Village Parking abstellen',d:'Kostenlos! Ab hier Shuttle nehmen',c:'#065f46'},
+      {t:'08:30',n:'💧 Lower Yosemite Fall Trail',d:'1,6 km Loop, 45 Min. April = MAXIMALE Wassermenge!',c:'#0891b2'},
+      {t:'09:30',n:'Shuttle → Mirror Lake (Stop #17)',d:'',c:'#065f46'},
+      {t:'09:45',n:'🪞 Mirror Lake Loop',d:'5 km, 1:15 Std. Half Dome Spiegelung — NUR im Frühling!',c:'#0891b2'},
+      {t:'11:00',n:'Brunch: Valley Lodge oder Picknick',d:'',c:'#64748b'},
+      {t:'12:00',n:'🥾 Mist Trail → Vernal Fall',d:'4,8 km, 3 Std., 300 Hm. REGENJACKEN! Nasse Steinstufen!',c:'#0891b2'},
+      {t:'15:00',n:'Sentinel Bridge + Merced River',d:'Half Dome Spiegelung im Fluss, Fotos, Entspannung',c:'#ea580c'},
+      {t:'15:45',n:'Ansel Adams Gallery (gratis)',d:'Im Visitor Center',c:'#7c3aed'},
+      {t:'16:15',n:'Rückfahrt Wawona',d:'43 km, 45 Min',c:'#065f46'},
+      {t:'17:30',n:'Abendessen kochen am Campground',d:'',c:'#ea580c'},
+      {t:'20:00',n:'⭐ Sternenhimmel über Yosemite',d:'Dark Sky — Milchstraße sichtbar!',c:'#092e4f'},
+    ],
+    cards:[
+      {emoji:'💧',title:'Yosemite Falls — April = Maximum!',body:'<p>Höchster Wasserfall Nordamerikas: 739m in 3 Stufen! Im April auf MAXIMUM durch die Schneeschmelze — ihr kommt zur perfekten Zeit!</p><p>Lower Yosemite Fall Trail: 1,6 km Loop, leicht, sehr nah dran. Nass werden garantiert!</p><p>💡 Side-Fact: Im Spätsommer trocknet der Fall komplett aus — ihr seht ihn in seiner vollen Pracht!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Lower+Yosemite+Fall'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Yosemite+Falls&ll=37.7566,-119.5975'}]},
+      {emoji:'🪞',title:'Mirror Lake — NUR im Frühling!',cls:'c',body:'<p>Bei ruhigem Wasser spiegelt sich der Half Dome perfekt im See — das klassische Yosemite-Postkartenmotiv!</p><p>5 km Loop, am besten vormittags wenn das Wasser ruhig ist.</p><p>💡 Side-Fact: Der See existiert nur im Frühling (Schneeschmelze). Im Sommer ist es eine trockene Wiese!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Mirror+Lake+Yosemite'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Mirror+Lake+Yosemite&ll=37.7514,-119.5562'}]},
+      {emoji:'🥾',title:'Mist Trail → Vernal Fall ⭐ HIGHLIGHT',cls:'g',body:'<p><strong>Spektakulärste Wanderung in Yosemite!</strong> 4,8 km hin+zurück, 300 Höhenmeter, ~3 Std.</p><p>Steinstufen direkt neben dem 97m-Wasserfall → KOMPLETT NASS! Regenjacken Pflicht!</p><p>⚠️ Feste Wanderschuhe! Stufen sind nass und rutschig.</p><p>💡 Side-Fact: Ältester Trail in Yosemite (1857). Im April donnern hier tausende Liter pro Sekunde herunter!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Mist+Trail+Yosemite'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Mist+Trail&ll=37.7325,-119.5585'}]},
+      {emoji:'⚠️',title:'Glacier Point = GESCHLOSSEN',cls:'r',body:'<p><strong>Glacier Point Road ist im April geschlossen!</strong> Öffnet erst Ende Mai/Juni nach der Schneeschmelze.</p><p>→ Kein Problem: Mehr Zeit für Valley Trails! Mist Trail + Mirror Lake sind mindestens genauso spektakulär.</p>'},
+      {emoji:'📱',title:'Offline-Hinweis + Shuttle',cls:'o',body:'<p>⚠️ Kein Handyempfang im Valley!</p><p>VORHER laden: Google Maps Offline-Karte „Yosemite".</p><p>🚌 Valley Shuttle: GRATIS, 7:00-22:00, alle 12-22 Min. 19 Stops. RV stehen lassen!</p><p>🥾 Packliste: Regenjacken, Wanderschuhe, 3L Wasser/Person, Snacks, Kamera (wasserdicht!)</p>'},
+    ],
+    spots:[
+      {name:'Tunnel View',lat:37.7157,lng:-119.6769,emoji:'📸',color:'#ea580c'},
+      {name:'Yosemite Falls',lat:37.7566,lng:-119.5975,emoji:'💧',color:'#0891b2'},
+      {name:'Mirror Lake',lat:37.7514,lng:-119.5562,emoji:'🪞',color:'#0891b2'},
+      {name:'Mist Trail / Vernal Fall',lat:37.7325,lng:-119.5585,emoji:'🥾',color:'#16a34a'},
+    ],
+    options:[]
+  },
+  {
+    date:'2026-04-11', num:13, wd:'Sa', label:'11.4.', title:'Yosemite → Los Altos',
+    color:'#065f46', desc:'Yosemite Westausgang, Groveland, RV-Rückgabe, letzte SF-Chance',
+    timeline:[
+      {t:'08:00',n:'RV-Checkliste: Tanks geleert? Saubermachen!',d:'Dump Station vor Ausgang nutzen',c:'#1e40af'},
+      {t:'08:30',n:'Abfahrt Yosemite, Hwy 120 W',d:'Big Oak Flat Road, ~3,5 Std. nach Los Altos',c:'#065f46'},
+      {t:'10:00',n:'Optionaler Stopp: Groveland Gold Town',d:'süßes historisches Städtchen',c:'#ea580c'},
+      {t:'~12:00',n:'Abfahrt auf US-101 S via Modesto/Fremont',d:'Richtung Los Altos/San Francisco Bay',c:'#065f46'},
+      {t:'~14:30',n:'Ankunft Los Altos, RV abgeben',d:'Fotos machen, Zustand checken',c:'#16a34a'},
+      {t:'15:00',n:'Schlüssel abgeben, Danksagung',d:'Mit Kathrin & Damian zusammensein',c:'#ea580c'},
+      {t:'16:00',n:'Letzte SF-Aktivitäten (optional)',d:'Muir Woods, Golden Gate Bridge, Haight-Ashbury',c:'#ea580c'},
+      {t:'19:00',n:'Letzter gemeinsamer Abend',d:'Abendessen bei Kathrin',c:'#64748b'},
+    ],
+    cards:[
+      {emoji:'🚐',title:'RV-Rückgabe',cls:'o',body:'<p>Checkliste: Tanks geleert (Dump Station)? Innenreinigung? Benzintank voll? Fotos vom Zustand machen!</p><p>Route: Hwy 120 West (Big Oak Flat Road), ~3,5 Std. nach Los Altos.</p><p>Optional: Stopp in Groveland — süßes Gold-Rush-Städtchen mit Frühstück-Cafés.</p>'},
+      {emoji:'🌉',title:'Letzte Chance SF',cls:'p',body:'<p>Falls noch nicht gemacht:</p><p>• Golden Gate Bridge Walk (2,7 km, kostenlos, unvergesslich!)</p><p>• Muir Woods (Redwood-Wald, Reservierung nötig: gomuirwoods.com)</p><p>• Sausalito (Künstler-Hafenstadt gegenüber)</p><p>• Haight-Ashbury (Hippie-Viertel der 60er)</p>'},
+      {emoji:'🏠',title:'Letzter Abend',body:'Genießt den letzten Abend bei Kathrin & Damian. Letzte Dollar für Souvenirs ausgeben! Koffer packen nicht vergessen.'},
+    ],
+    spots:[
+      {name:'Groveland',lat:37.8756,lng:-120.4322,emoji:'🏘️',color:'#ea580c'},
+      {name:'Los Altos',lat:37.3688,lng:-122.1145,emoji:'🏠',color:'#16a34a'},
+    ],
+    options:[]
+  },
+  {
+    date:'2026-04-12', num:14, wd:'So', label:'12.4.', title:'Abreise',
+    color:'#7c2d12', desc:'SFO → Frankfurt, Flug LH456 14:40',
+    timeline:[
+      {t:'07:00',n:'Letzte Minuten packen',d:'Nichts vergessen!',c:'#1e40af'},
+      {t:'08:00',n:'Breakfast bei Kathrin',d:'Goodbye Hug!',c:'#ea580c'},
+      {t:'08:30',n:'Abfahrt zu SFO',d:'US-101 N → SFO (30 Min)',c:'#1e40af'},
+      {t:'10:00',n:'Ankunft SFO, International Terminal G',d:'3h vorher da sein!',c:'#1e40af'},
+      {t:'10:15',n:'Check-in, Gepäck abgeben',d:'Reisepass vorzeigen',c:'#1e40af'},
+      {t:'10:45',n:'Security, Duty Free Shopping',d:'Letzte Souvenirs!',c:'#ea580c'},
+      {t:'12:00',n:'Boarding, Gate Check',d:'LH456 Terminal G',c:'#1e40af'},
+      {t:'14:40',n:'Departure SFO → Frankfurt',d:'Nonstop, 10h Flugzeit',c:'#dc2626'},
+      {t:'13.04. 10:25',n:'Ankunft Frankfurt Terminal 1',d:'Umstieg, Baggage, Zug nach Hause',c:'#16a34a'},
+    ],
+    cards:[
+      {emoji:'✈️',title:'Fluginfos',cls:'r',body:'<p><strong>SFO → FRA</strong> | Abflug 14:40 | Ankunft 13.04. 10:25</p><p>International Terminal G. 3 Stunden vorher da sein!</p><p>Los Altos → SFO: ~30 Minuten.</p><p>Letzte Chance: Duty Free, letzte Souvenirs!</p>',links:[{text:'Apple Maps SFO',url:'https://maps.apple.com/?q=SFO+Airport&ll=37.6213,-122.3790'}]},
+      {emoji:'📋',title:'Abreise-Checkliste',cls:'o',body:'<p>☐ Pässe & Boarding Passes</p><p>☐ Alle Ladekabel eingepackt</p><p>☐ Souvenirs im Koffer</p><p>☐ Nichts bei Kathrin vergessen</p><p>☐ Danke sagen!</p>'},
+    ],
+    spots:[
+      {name:'SFO Terminal G',lat:37.6213,lng:-122.3790,emoji:'✈️',color:'#dc2626'},
+      {name:'Los Altos Home',lat:37.3688,lng:-122.1145,emoji:'🏠',color:'#16a34a'},
+    ],
+    options:[]
+  },
+];
+
+// =========== RENDERING ===========
+function showPage(idx){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page'+idx).classList.add('active');
+  document.getElementById('btn'+idx).classList.add('active');
+  window.scrollTo(0, 100);
+}
+
+document.getElementById('dayBar').innerHTML = DAYS.map((d, i) =>
+  '<button class="day-btn '+(i===0?'active ':'')+'" id="btn'+d.num+'" onclick="showPage('+d.num+')"><span class="d-num">'+d.num+'</span><span class="d-wd">'+d.wd+'</span></button>'
+).join('');
+
+let pagesHtml = '';
+DAYS.forEach(d => {
+  let html = '<div class="page '+(d.num===1?'active':'')+'" id="page'+d.num+'">';
+  html += '<div class="day-hdr" style="background:'+d.color+'"><h2>'+d.title+'</h2><p>'+d.desc+'</p></div>';
+
+  // Timeline
+  if(d.timeline && d.timeline.length){
+    html += '<h3 style="font-size:14px;margin:16px 0 8px;padding-left:4px">Timeline</h3>';
+    html += '<div class="tl">';
+    d.timeline.forEach((tl, i) => {
+      html += '<div class="ti2"><div class="td" style="background:'+tl.c+'"></div><div style="padding-bottom:10px">';
+      html += '<div class="tm" style="color:'+tl.c+'">'+tl.t+'</div>';
+      html += '<div class="tn">'+tl.n+'</div>';
+      html += '<div class="tx">'+tl.d+'</div></div></div>';
+    });
+    html += '</div>';
+  }
+
+  // Info Cards
+  if(d.cards && d.cards.length){
+    html += '<h3 style="font-size:14px;margin:16px 0 8px;padding-left:4px">Details & Tipps</h3>';
+    d.cards.forEach(card => {
+      html += '<div class="card '+(card.cls||'')+'">';
+      html += '<div class="ch"><span class="ce">'+(card.emoji||'')+'</span><div><div class="ct">'+card.title+'</div></div></div>';
+      html += '<div class="cb">'+card.body+'</div>';
+      if(card.links && card.links.length){
+        card.links.forEach(lnk => {
+          html += '<a class="al" href="'+lnk.url+'" target="_blank">'+mapPin()+' '+lnk.text+'</a>&nbsp;&nbsp;';
+        });
+      }
+      html += '</div>';
+    });
+  }
+
+  // Options
+  if(d.options && d.options.length){
+    html += '<h3 style="font-size:14px;margin:16px 0 8px;padding-left:4px">Optionen</h3>';
+    d.options.forEach(opt => {
+      html += '<div class="opt-box"><h4>'+opt.title+'</h4><p style="font-size:12px;color:#475569;line-height:1.5">'+opt.desc+'</p></div>';
+    });
+  }
+
+  html += '</div>';
+  pagesHtml += html;
+});
+
+document.getElementById('pages').innerHTML = pagesHtml;
+</script>
+</body>
+</html>
