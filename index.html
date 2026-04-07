@@ -63,7 +63,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="day-bar" id="dayBar"></div>
 <div id="pages"></div>
 
-<div class="footer">Kalifornien 2026 Reiseguide — Stand 06.04.2026 (E-Bike + DTLA + Hollywood Update)</div>
+<div class="footer">Kalifornien 2026 Reiseguide — Stand 07.04.2026 (Fresno statt Bakersfield + Yosemite-Zuschlag + realistische Zeiten)</div>
 
 <script>
 function mapPin(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';}
@@ -381,98 +381,118 @@ const DAYS = [
     ]
   },
   {
-    date:'2026-04-08', num:10, wd:'Mi', label:'8.4.', title:'Joshua Tree → Bakersfield',
-    color:'#92400e', desc:'Wüsten-Sonnenaufgang, Orange Grove RV Park, letzte Einkäufe vor Yosemite',
+    date:'2026-04-08', num:10, wd:'Mi', label:'8.4.', title:'BLM → Fresno (Durchfahrt!)',
+    color:'#92400e', desc:'Wüsten-Sonnenaufgang → Bakersfield Lunch → Costco Fresno → morgen nur 2h bis Yosemite!',
     timeline:[
-      {t:'06:30',n:'Wüsten-Sonnenaufgang, Kaffee, Stille',d:'MAGISCH!',c:'#ea580c'},
-      {t:'08:00',n:'Abfahrt BLM → Bakersfield',d:'I-10 W → I-15 N → CA-58 W (330 km, ~3,5 Std.)',c:'#065f46'},
-      {t:'11:00',n:'Ankunft Bakersfield, RV-Park einchecken',d:'Orange Grove RV Park oder Walmart',c:'#16a34a'},
-      {t:'12:00',n:'Mittagessen, Relaxen, Wäsche waschen',d:'Pool-Zeit!',c:'#ea580c'},
-      {t:'14:00',n:'Großeinkauf für Yosemite',d:'Safeway/Costco: Proviant, Wasser, Gas (€ billiger hier!)',c:'#1e40af'},
-      {t:'16:00',n:'RV-Service, Check-up',d:'Zustand überprüfen, Reifen? Öl? Alle OK?',c:'#1e40af'},
-      {t:'18:00',n:'Abendessen + früh schlafen',d:'Morgen lange Fahrt nach Yosemite!',c:'#64748b'},
+      {t:'09:00',n:'☀️ Wüsten-Sonnenaufgang genießen',d:'Kaffee kochen in der Stille der Mojave — MAGISCH!',c:'#ea580c'},
+      {t:'09:30',n:'Frühstück + RV zusammenpacken',d:'Müll mitnehmen, Leave No Trace!',c:'#64748b'},
+      {t:'10:00',n:'🚐 Abfahrt BLM → Westen',d:'I-10 W → CA-58 → CA-99 N (~550 km gesamt)',c:'#065f46'},
+      {t:'13:30',n:'🍔 Bakersfield: Tankstopp + In-N-Out!',d:'Günstigster Sprit! In-N-Out Burger = California-Pflicht!',c:'#ea580c'},
+      {t:'14:15',n:'🚐 Weiterfahrt CA-99 N → Fresno',d:'~180 km, ~2h gerader Highway',c:'#065f46'},
+      {t:'16:30',n:'Ankunft Fresno, RV-Park einchecken',d:'Duschen, durchatmen!',c:'#16a34a'},
+      {t:'17:00',n:'🛒 Costco Fresno — GROSSEINKAUF!',d:'Proviant für 3 Tage Yosemite (dort TEUER!)',c:'#1e40af'},
+      {t:'18:30',n:'🧺 Wäsche waschen im RV-Park',d:'Laundry Room nutzen!',c:'#64748b'},
+      {t:'19:30',n:'Abendessen + entspannen',d:'Morgen nur noch 2h bis Yosemite!',c:'#64748b'},
     ],
     cards:[
-      {emoji:'🌅',title:'Wüsten-Sonnenaufgang',body:'Aufwachen in der Stille der Mojave-Wüste! Kaffee kochen, den Sonnenaufgang genießen — das wird einer der magischsten Momente der Reise.'},
-      {emoji:'🏕️',title:'Orange Grove RV Park',cls:'g',body:'<p><strong>~$40/Nacht</strong> | Full Hookups, Pool!</p><p>Perfekt zum Erholen nach der Wüste. Wäsche waschen, RV aufräumen, am Pool entspannen.</p><p>Tel: (661) 366-4662</p><p>Backup: Walmart Bakersfield (gratis, vorher Manager fragen!)</p>',links:[{text:'Website',url:'https://www.orangegrovervpark.com'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Orange+Grove+RV+Park+Bakersfield&ll=35.3838,-119.0493'}]},
-      {emoji:'💡',title:'Einkauf-Tipp',cls:'o',body:'Bakersfield = letzter großer Stopp vor Yosemite! In Fresno morgen nochmal möglich, aber Bakersfield hat mehr Auswahl. Tanken hier ist deutlich günstiger als in den Bergen!'},
+      {emoji:'🌅',title:'Wüsten-Sonnenaufgang',body:'Aufwachen in der Stille der Mojave! Kaffee kochen, den letzten Wüsten-Sonnenaufgang genießen. Letzte Fotos im goldenen Licht — danach geht\'s in die Berge!'},
+      {emoji:'🍔',title:'In-N-Out Burger — California-Pflicht!',cls:'o',body:'<p>Die legendäre Burger-Kette gibt es NUR in Kalifornien! Bestellt „Animal Style" (geheimer Menü-Hack): Extra-Sauce, karamellisierte Zwiebeln, Senf-gegrilltes Patty.</p><p>Mehrere Filialen direkt an der CA-99 in Bakersfield.</p><p>Perfekter Lunch-Stopp auf halber Strecke!</p>'},
+      {emoji:'🛒',title:'Costco Fresno — Großeinkauf Yosemite!',cls:'g',body:'<p><strong>Warum Fresno statt Bakersfield?</strong> Costco Fresno liegt auf dem Weg UND morgen seid ihr in 2h in Yosemite statt 5h!</p><p><strong>Costco:</strong> 4500 W Shaw Ave, Fresno (Mo-Fr 9-20:30, Sa-So 9-19)</p><p><strong>Einkaufsliste (3 Tage Yosemite):</strong></p><p>• Frühstück ×3, Mittag ×3, Abendessen ×3</p><p>• Snacks + Trail Mix für Wanderungen</p><p>• Wasser: min. 6L pro Person!</p><p>• Feuerholz (oder im Park kaufen)</p>',links:[{text:'Costco Fresno',url:'https://www.google.com/maps/place/Costco+Wholesale,+4500+W+Shaw+Ave,+Fresno,+CA+93722'},{text:'Route BLM→Fresno',url:'https://www.google.com/maps/dir/33.6740,-115.8071/Fresno+CA'}]},
+      {emoji:'⛽',title:'Tanken in Bakersfield = SPAREN!',cls:'c',body:'<p>Bakersfield hat den günstigsten Sprit auf der Route! ~$4.90-5.00/Gallon vs. $6+ in den Bergen.</p><p>Tank KOMPLETT VOLL machen — reicht bis Yosemite und zurück!</p>'},
     ],
     spots:[
       {name:'BLM South',lat:33.6740,lng:-115.8071,emoji:'⛺',color:'#16a34a'},
-      {name:'Orange Grove RV Park',lat:35.3838,lng:-119.0493,emoji:'🏕️',color:'#16a34a'},
+      {name:'In-N-Out Bakersfield',lat:35.3733,lng:-119.0187,emoji:'🍔',color:'#ea580c'},
+      {name:'Costco Fresno',lat:36.8078,lng:-119.8522,emoji:'🛒',color:'#1e40af'},
     ],
-    options:[]
+    options:[
+      {title:'🧺 RV-Wartung Checkliste',desc:'Tanks leeren (Dump Station!), Wäsche waschen, RV-Check: Reifen, Öl, Kühlwasser. Benzintank VOLL! Offline-Karten Yosemite laden (kein Empfang im Park)!'},
+    ]
   },
   {
-    date:'2026-04-09', num:11, wd:'Do', label:'9.4.', title:'Yosemite Tag 1',
-    color:'#065f46', desc:'Bakersfield → Yosemite, Mariposa Grove, Tunnel View, Camping',
+    date:'2026-04-09', num:11, wd:'Do', label:'9.4.', title:'Yosemite Tag 1 — Ankunft!',
+    color:'#065f46', desc:'Fresno → Oakhurst → Yosemite South Entrance → Valley Nachmittag: Falls + Mirror Lake!',
     timeline:[
-      {t:'08:00',n:'Abfahrt Bakersfield',d:'CA-99 N → CA-41 N (300 km, ~5-6 Std.)',c:'#065f46'},
-      {t:'~13:30',n:'Ankunft Yosemite Südeingang',d:'Hwy 41 South',c:'#16a34a'},
-      {t:'13:30',n:'Park Eintritt',d:'$35/Fahrzeug (7 Tage)',c:'#16a34a'},
-      {t:'14:00',n:'Mariposa Grove',d:'Giant Sequoias! 500+ Bäume, 1.800 Jahre alt, 63m hoch',c:'#0891b2'},
-      {t:'15:30',n:'Wawona Campground einchecken',d:'$36/Nacht, RV bis 35ft OK!',c:'#16a34a'},
-      {t:'16:30',n:'Tunnel View',d:'DER Yosemite-Blick! El Capitan, Bridalveil, Half Dome',c:'#ea580c'},
-      {t:'17:30',n:'Rückfahrt Campground, Abendessen',d:'Selbst kochen oder mitgebracht',c:'#64748b'},
-      {t:'19:30',n:'Früh schlafen! Morgen früh Wandern!',d:'',c:'#64748b'},
-    ],
-    cards:[
-      {emoji:'🏞️',title:'Yosemite — WOW-Faktor!',body:'<p>Yosemite Valley ist ein Wunder der Natur. 1 km hohe Granitwände, Wasserfälle die hunderte Meter fallen, uralte Mammutbäume.</p><p><strong>Eintritt:</strong> $35/Fahrzeug (7 Tage).</p><p>⚠️ <strong>NEU 2025:</strong> Ausländergebühr $100/Person (ab 16 J.)! Prüft ob das 2026 noch gilt → evtl. $235 statt $35!</p><p>⚠️ <strong>Hwy 41 Tunnel:</strong> Clearance 3,1m (10\'2"). Euer RV evtl. zu hoch → Ranger am Eingang fragen! Alternative: Hwy 140 via Merced (kein Tunnel, RV-freundlich).</p><p>⚠️ <strong>Glacier Point Road: GESCHLOSSEN im April!</strong></p><p>💡 Side-Fact: El Capitan wurde 2017 von Alex Honnold OHNE Seil bestiegen — Film „Free Solo"!</p>',links:[{text:'NPS Yosemite',url:'https://www.nps.gov/yose/'},{text:'Conditions',url:'https://www.nps.gov/yose/planyourvisit/conditions.htm'},{text:'Fees 2026',url:'https://www.nps.gov/yose/planyourvisit/fees.htm'},{text:'Google Maps Route',url:'https://www.google.com/maps/dir/Orange+Grove+RV+Park+Bakersfield/Yosemite+South+Entrance'}]},
-      {emoji:'🌲',title:'Mariposa Grove',cls:'g',body:'<p>Über 500 Giant Sequoias — die größten Lebewesen der Erde! Der „Grizzly Giant" ist ~1.800 Jahre alt und 63m hoch.</p><p>Direkt am Südeingang. Shuttle vom Parkplatz (kostenlos). 2-3 Trails von leicht bis moderat.</p><p>💡 Side-Fact: Sequoias können nur durch Feuer keimen — ihre Zapfen öffnen sich erst bei Hitze!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Mariposa+Grove+Yosemite&ll=37.5147,-119.6113'}]},
-      {emoji:'📸',title:'Tunnel View',body:'<p>DER Yosemite-Blick! Von links nach rechts: El Capitan, Bridalveil Fall, Cathedral Rocks, Half Dome ganz hinten. Ansel Adams machte hier sein berühmtestes Foto.</p><p>Morgens und abends bestes Licht. Im April mit Schnee auf den Gipfeln!</p>',links:[{text:'Apple Maps',url:'https://maps.apple.com/?q=Tunnel+View+Yosemite&ll=37.7157,-119.6769'}]},
-      {emoji:'🏕️',title:'Camping Yosemite',cls:'r',body:'<p><strong>Wawona Campground:</strong> $36/Nacht, RV bis 35ft (ihr passt!). Ruhiger als Valley Camps.</p><p><strong>Hodgdon Meadow:</strong> $36/Nacht, Alternative am Westeingang.</p><p>⚠️ Upper Pines GESCHLOSSEN bis 9.4. (Gefahrenbaumfällung)!</p><p>Falls ausgebucht: Indian Flat RV Park (Hwy 140, $45-60) oder Summerdale CG (First-Come, $30).</p><p>🐻 BÄREN! ALLE Lebensmittel in Bear Lockers! Bären können RV-Türen öffnen!</p>',links:[{text:'Wawona buchen',url:'https://www.recreation.gov/camping/campgrounds/232450'},{text:'Hodgdon buchen',url:'https://www.recreation.gov/camping/campgrounds/232451'}]},
-    ],
-    spots:[
-      {name:'Mariposa Grove',lat:37.5147,lng:-119.6113,emoji:'🌲',color:'#0891b2'},
-      {name:'Tunnel View',lat:37.7157,lng:-119.6769,emoji:'📸',color:'#ea580c'},
-      {name:'Wawona Campground',lat:37.4742,lng:-119.6434,emoji:'🏕️',color:'#16a34a'},
-    ],
-    options:[]
-  },
-  {
-    date:'2026-04-10', num:12, wd:'Fr', label:'10.4.', title:'Yosemite Tag 2',
-    color:'#065f46', desc:'Yosemite Valley: Tunnel View, Falls, Mirror Lake, Mist Trail, Sternenhimmel',
-    timeline:[
-      {t:'06:30',n:'Früher Start! Wawona → Valley',d:'43 km, 45 Min. Valley Shuttle ab 7:00!',c:'#065f46'},
-      {t:'07:45',n:'📸 Tunnel View — DER Yosemite-Blick!',d:'El Capitan + Bridalveil + Half Dome. Morgens bestes Licht!',c:'#ea580c'},
-      {t:'08:15',n:'RV am Village Parking abstellen',d:'Kostenlos! Ab hier Shuttle nehmen',c:'#065f46'},
-      {t:'08:30',n:'💧 Lower Yosemite Fall Trail',d:'1,6 km Loop, 45 Min. April = MAXIMALE Wassermenge!',c:'#0891b2'},
-      {t:'09:30',n:'Shuttle → Mirror Lake (Stop #17)',d:'',c:'#065f46'},
-      {t:'09:45',n:'🪞 Mirror Lake Loop',d:'5 km, 1:15 Std. Half Dome Spiegelung — NUR im Frühling!',c:'#0891b2'},
-      {t:'11:00',n:'Brunch: Valley Lodge oder Picknick',d:'',c:'#64748b'},
-      {t:'12:00',n:'🥾 Mist Trail → Vernal Fall',d:'4,8 km, 3 Std., 300 Hm. REGENJACKEN! Nasse Steinstufen!',c:'#0891b2'},
-      {t:'15:00',n:'Sentinel Bridge + Merced River',d:'Half Dome Spiegelung im Fluss, Fotos, Entspannung',c:'#ea580c'},
-      {t:'15:45',n:'Ansel Adams Gallery (gratis)',d:'Im Visitor Center',c:'#7c3aed'},
-      {t:'16:15',n:'Rückfahrt Wawona',d:'43 km, 45 Min',c:'#065f46'},
-      {t:'17:30',n:'Abendessen kochen am Campground',d:'',c:'#ea580c'},
+      {t:'09:30',n:'🚐 Abfahrt Fresno → CA-41 Nord',d:'Richtung Oakhurst, ~100 km Bergstraße',c:'#065f46'},
+      {t:'10:30',n:'🛒 Stopp Oakhurst: Vons/Raley\'s',d:'Letzte Einkäufe + Benzin! Letzter Laden vor Yosemite!',c:'#1e40af'},
+      {t:'11:00',n:'Weiterfahrt CA-41 → South Entrance',d:'45 Min Bergstraße, wunderschön!',c:'#065f46'},
+      {t:'11:45',n:'🏞️ Ankunft Yosemite Südeingang',d:'$35 Fahrzeug + $200 Ausländerzuschlag (2×$100)!',c:'#16a34a'},
+      {t:'12:00',n:'🏕️ Wawona Campground einchecken',d:'$36/Nacht. RV aufstellen, Bear Locker!',c:'#16a34a'},
+      {t:'12:30',n:'Schnelles Mittagessen am Campground',d:'Dann ab ins Valley!',c:'#64748b'},
+      {t:'13:00',n:'🚐 Wawona → Yosemite Valley',d:'43 km, ~45 Min. Wawona Tunnel (Höhe prüfen!)',c:'#065f46'},
+      {t:'13:45',n:'📸 Tunnel View — DER Blick!',d:'El Capitan + Bridalveil + Half Dome. Kurzer Fotostopp!',c:'#ea580c'},
+      {t:'14:00',n:'RV am Village Parking abstellen',d:'Kostenlos! Ab hier Valley Shuttle!',c:'#065f46'},
+      {t:'14:15',n:'💧 Lower Yosemite Fall Trail',d:'1,6 km Loop, 45 Min. April = MAXIMALE Wassermenge!',c:'#0891b2'},
+      {t:'15:00',n:'Shuttle → Mirror Lake (Stop #17)',d:'',c:'#065f46'},
+      {t:'15:15',n:'🪞 Mirror Lake Loop',d:'5 km, 1:15 Std. Half Dome Spiegelung — NUR im Frühling!',c:'#0891b2'},
+      {t:'16:30',n:'Sentinel Bridge + Merced River',d:'Half Dome Spiegelung, Fotos, durchatmen',c:'#ea580c'},
+      {t:'17:00',n:'Visitor Center + Ansel Adams Gallery',d:'Gratis! Ranger-Infos für morgen holen',c:'#7c3aed'},
+      {t:'17:30',n:'🚐 Rückfahrt Wawona',d:'43 km, ~45 Min',c:'#065f46'},
+      {t:'18:30',n:'Abendessen am Campground',d:'Grillen am Campfire-Ring',c:'#ea580c'},
       {t:'20:00',n:'⭐ Sternenhimmel über Yosemite',d:'Dark Sky — Milchstraße sichtbar!',c:'#092e4f'},
     ],
     cards:[
-      {emoji:'💧',title:'Yosemite Falls — April = Maximum!',body:'<p>Höchster Wasserfall Nordamerikas: 739m in 3 Stufen! Im April auf MAXIMUM durch die Schneeschmelze — ihr kommt zur perfekten Zeit!</p><p>Lower Yosemite Fall Trail: 1,6 km Loop, leicht, sehr nah dran. Nass werden garantiert!</p><p>💡 Side-Fact: Im Spätsommer trocknet der Fall komplett aus — ihr seht ihn in seiner vollen Pracht!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Lower+Yosemite+Fall'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Yosemite+Falls&ll=37.7566,-119.5975'}]},
-      {emoji:'🪞',title:'Mirror Lake — NUR im Frühling!',cls:'c',body:'<p>Bei ruhigem Wasser spiegelt sich der Half Dome perfekt im See — das klassische Yosemite-Postkartenmotiv!</p><p>5 km Loop, am besten vormittags wenn das Wasser ruhig ist.</p><p>💡 Side-Fact: Der See existiert nur im Frühling (Schneeschmelze). Im Sommer ist es eine trockene Wiese!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Mirror+Lake+Yosemite'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Mirror+Lake+Yosemite&ll=37.7514,-119.5562'}]},
-      {emoji:'🥾',title:'Mist Trail → Vernal Fall ⭐ HIGHLIGHT',cls:'g',body:'<p><strong>Spektakulärste Wanderung in Yosemite!</strong> 4,8 km hin+zurück, 300 Höhenmeter, ~3 Std.</p><p>Steinstufen direkt neben dem 97m-Wasserfall → KOMPLETT NASS! Regenjacken Pflicht!</p><p>⚠️ Feste Wanderschuhe! Stufen sind nass und rutschig.</p><p>⚠️ <strong>April-Hinweis:</strong> Oberhalb der Brücke kann Schnee/Eis liegen. Wanderstöcke/Grödel empfohlen! Vorher Conditions-Seite checken.</p><p>💡 Side-Fact: Ältester Trail in Yosemite (1857). Im April donnern hier tausende Liter pro Sekunde herunter!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Mist+Trail+Yosemite'},{text:'Apple Maps',url:'https://maps.apple.com/?q=Mist+Trail&ll=37.7325,-119.5585'}]},
-      {emoji:'⚠️',title:'Glacier Point = GESCHLOSSEN',cls:'r',body:'<p><strong>Glacier Point Road ist im April geschlossen!</strong> Öffnet erst Ende Mai/Juni nach der Schneeschmelze.</p><p>→ Kein Problem: Mehr Zeit für Valley Trails! Mist Trail + Mirror Lake sind mindestens genauso spektakulär.</p>'},
-      {emoji:'📱',title:'Offline-Hinweis + Shuttle',cls:'o',body:'<p>⚠️ Kein Handyempfang im Valley!</p><p>VORHER laden: Google Maps Offline-Karte „Yosemite".</p><p>🚌 Valley Shuttle: GRATIS, 7:00-22:00, alle 12-22 Min. 19 Stops. RV stehen lassen!</p><p>🥾 Packliste: Regenjacken, Wanderschuhe, 3L Wasser/Person, Snacks, Kamera (wasserdicht!)</p>'},
+      {emoji:'🏞️',title:'Yosemite — WOW-Faktor!',body:'<p>Yosemite Valley: 1 km hohe Granitwände, Wasserfälle die hunderte Meter fallen, uralte Mammutbäume.</p><p><strong>Eintritt:</strong> $35/Fahrzeug (7 Tage).</p><p>💰 <strong>ACHTUNG — Ausländerzuschlag 2026 BESTÄTIGT:</strong> $100/Person ab 16 J.! Norbert + Ines = $200 extra. Mika (15) = frei. <strong>Gesamt: $235!</strong></p><p>💡 Alternative: Non-Resident Annual Pass ($250) — lohnt sich bei mehreren Parks.</p><p>⚠️ <strong>Wawona Tunnel:</strong> 3,1m am Bordstein, ~4m in der Mitte. Ranger am Eingang fragen!</p><p>⚠️ <strong>Glacier Point Road: GESCHLOSSEN im April!</strong></p><p>💡 El Capitan wurde 2017 von Alex Honnold OHNE Seil bestiegen — Film „Free Solo"!</p>',links:[{text:'NPS Yosemite',url:'https://www.nps.gov/yose/'},{text:'Conditions',url:'https://www.nps.gov/yose/planyourvisit/conditions.htm'},{text:'Fees 2026',url:'https://www.nps.gov/yose/planyourvisit/fees.htm'},{text:'Route Fresno→Yosemite',url:'https://www.google.com/maps/dir/Fresno+CA/Yosemite+South+Entrance'}]},
+      {emoji:'⚠️',title:'Mariposa Grove — evtl. GESCHLOSSEN!',cls:'r',body:'<p><strong>Seit Feb. 2026 wegen Sturmschäden gesperrt.</strong> Grove, Parkplatz, Washburn Trail — alles zu.</p><p>Kein bestätigtes Wiedereröffnungsdatum!</p><p>→ Deshalb NICHT eingeplant. Falls doch offen: Bonus am Rückweg!</p><p>📞 Checken: (209) 372-0200</p>',links:[{text:'NPS Closures',url:'https://www.nps.gov/yose/learn/management/closures.htm'}]},
+      {emoji:'📸',title:'Tunnel View',body:'<p>DER Yosemite-Blick! El Capitan, Bridalveil Fall, Cathedral Rocks, Half Dome. Ansel Adams machte hier sein berühmtestes Foto.</p><p>Nachmittags warmes Licht, im April mit Schnee auf den Gipfeln!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Tunnel+View+Yosemite'}]},
+      {emoji:'🏕️',title:'Camping Yosemite',cls:'g',body:'<p><strong>Wawona Campground:</strong> $36/Nacht, RV bis 35ft. Dump Station 1 Meile südlich.</p><p>⚠️ Upper/Lower Pines: GESCHLOSSEN Anfang April!</p><p>Falls Wawona voll: Indian Flat RV Park (Hwy 140, $45-60, Hookups!)</p><p>🐻 <strong>BÄREN!</strong> ALLE Lebensmittel in Bear Lockers!</p>',links:[{text:'Wawona buchen',url:'https://www.recreation.gov/camping/campgrounds/232446'},{text:'Indian Flat RV',url:'https://www.google.com/maps/place/Indian+Flat+RV+Park'}]},
+      {emoji:'💧',title:'Yosemite Falls — April = Maximum!',body:'<p>Höchster Wasserfall Nordamerikas: 739m! Im April auf MAXIMUM durch Schneeschmelze!</p><p>Lower Fall Trail: 1,6 km Loop, leicht, nah dran. Nass werden garantiert!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Lower+Yosemite+Fall'}]},
+      {emoji:'🪞',title:'Mirror Lake — NUR im Frühling!',cls:'c',body:'<p>Half Dome spiegelt sich perfekt im See — DAS Postkartenmotiv! 5 km Loop.</p><p>💡 Im Sommer = trockene Wiese! Ihr seht ihn in voller Pracht!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Mirror+Lake+Yosemite'}]},
     ],
     spots:[
+      {name:'Oakhurst (Einkauf)',lat:37.3282,lng:-119.6478,emoji:'🛒',color:'#1e40af'},
+      {name:'Wawona Campground',lat:37.4742,lng:-119.6434,emoji:'🏕️',color:'#16a34a'},
       {name:'Tunnel View',lat:37.7157,lng:-119.6769,emoji:'📸',color:'#ea580c'},
       {name:'Yosemite Falls',lat:37.7566,lng:-119.5975,emoji:'💧',color:'#0891b2'},
       {name:'Mirror Lake',lat:37.7514,lng:-119.5562,emoji:'🪞',color:'#0891b2'},
-      {name:'Mist Trail / Vernal Fall',lat:37.7325,lng:-119.5585,emoji:'🥾',color:'#16a34a'},
     ],
-    options:[]
+    options:[
+      {title:'🌲 Falls Mariposa Grove doch offen!',desc:'Direkt am Südeingang, 2h einplanen. Grizzly Giant: ~1.800 Jahre alt, 63m hoch! Checkt am Eingang oder ruft vorher an: (209) 372-0200.'},
+      {title:'🛣️ Alternative: Hwy 140 (kein Tunnel!)',desc:'Falls Wawona Tunnel zu niedrig: Hwy 140 via Merced → Arch Rock Entrance. 12\'10" Clearance = kein Problem! Wawona dann nur über Südeingang erreichbar (Umweg).'},
+    ]
+  },
+  {
+    date:'2026-04-10', num:12, wd:'Fr', label:'10.4.', title:'Yosemite Tag 2 — Wander-Tag!',
+    color:'#065f46', desc:'Mist Trail → Vernal Fall (DAS Highlight!), Bridalveil Fall, Valley erkunden',
+    timeline:[
+      {t:'08:30',n:'Frühstück am Campground',d:'Gut essen — heute wird gewandert!',c:'#64748b'},
+      {t:'09:00',n:'🚐 Abfahrt Wawona → Valley',d:'43 km, ~45 Min',c:'#065f46'},
+      {t:'09:45',n:'RV am Village Parking abstellen',d:'Kostenlos! Ab hier Shuttle!',c:'#065f46'},
+      {t:'10:00',n:'🥾 MIST TRAIL → VERNAL FALL ⭐',d:'4,8 km, ~3 Std., 300 Hm. DAS Highlight! REGENJACKEN!',c:'#0891b2'},
+      {t:'13:00',n:'🍕 Mittagessen im Valley',d:'Valley Lodge Cafeteria, Degnan\'s Deli oder Picknick am Merced River',c:'#ea580c'},
+      {t:'14:00',n:'💧 Bridalveil Fall (kurzer Spaziergang)',d:'800m hin+zurück, 10 Min. Wasserfall im Nebel!',c:'#0891b2'},
+      {t:'14:30',n:'Sentinel Bridge + Merced River',d:'Half Dome Spiegelung, letzte Fotos, entspannen',c:'#ea580c'},
+      {t:'15:00',n:'Cook\'s Meadow Loop (optional)',d:'1,6 km Spaziergang mit Blick auf Half Dome + Yosemite Falls',c:'#7c3aed'},
+      {t:'15:30',n:'🚐 Rückfahrt Wawona',d:'43 km, ~45 Min',c:'#065f46'},
+      {t:'16:30',n:'Letzter Nachmittag am Campground',d:'Relaxen, packen, letzte Yosemite-Momente',c:'#64748b'},
+      {t:'18:00',n:'Letztes Abendessen in der Natur',d:'Am Campfire-Ring kochen, Sterne gucken',c:'#ea580c'},
+      {t:'20:00',n:'⭐ Letzte Nacht unter Yosemites Sternen',d:'Genießt es — morgen geht\'s zurück in die Zivilisation!',c:'#092e4f'},
+    ],
+    cards:[
+      {emoji:'🥾',title:'Mist Trail → Vernal Fall ⭐ DAS HIGHLIGHT!',cls:'g',body:'<p><strong>Spektakulärste Wanderung in Yosemite!</strong> 4,8 km hin+zurück, 300 Höhenmeter, ~3 Std.</p><p>Steinstufen direkt neben dem 97m-Wasserfall → KOMPLETT NASS! Regenjacken Pflicht!</p><p>⚠️ Feste Wanderschuhe! Stufen sind nass und rutschig.</p><p>⚠️ <strong>April:</strong> Oberhalb der Brücke kann Schnee/Eis liegen. Conditions-Seite checken!</p><p>💡 Ältester Trail in Yosemite (1857). Im April tausende Liter pro Sekunde!</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Mist+Trail+Yosemite'},{text:'NPS Trail Info',url:'https://www.nps.gov/yose/planyourvisit/vernalnevadatrail.htm'}]},
+      {emoji:'💧',title:'Bridalveil Fall',cls:'c',body:'<p>Leichter 800m-Spaziergang zum Wasserfall. Im April kraftvoll — der Wind bläst die Gischt wie einen Brautschleier!</p><p>Nur 10 Min. vom Parkplatz. Perfekt als Nachmittags-Stopp nach dem Mist Trail.</p>',links:[{text:'Google Maps',url:'https://www.google.com/maps/place/Bridalveil+Fall+Yosemite'}]},
+      {emoji:'📱',title:'Packliste & Shuttle-Info',cls:'o',body:'<p>⚠️ Kein Handyempfang! Offline-Karten vorher laden!</p><p>🚌 Valley Shuttle: GRATIS, 7:00-22:00, alle 12-22 Min.</p><p>🥾 <strong>HEUTE PFLICHT:</strong> Regenjacken, Wanderschuhe, 3L Wasser/Person, Snacks, Kamera wasserdicht!</p><p>⚠️ Bear Locker: Essen wegsperren vor Abfahrt!</p>'},
+    ],
+    spots:[
+      {name:'Mist Trail / Vernal Fall',lat:37.7325,lng:-119.5585,emoji:'🥾',color:'#16a34a'},
+      {name:'Bridalveil Fall',lat:37.7166,lng:-119.6462,emoji:'💧',color:'#0891b2'},
+      {name:'Sentinel Bridge',lat:37.7456,lng:-119.5890,emoji:'📸',color:'#ea580c'},
+    ],
+    options:[
+      {title:'🥾 Nevada Fall (Verlängerung Mist Trail)',desc:'Wer noch Energie hat: Vom Vernal Fall weiter zum Nevada Fall (594 Stufen, +2h). Atemberaubend, aber anstrengend! Nur wenn ihr euch fit fühlt und genug Zeit habt.'},
+    ]
   },
   {
     date:'2026-04-11', num:13, wd:'Sa', label:'11.4.', title:'Yosemite → Los Altos',
     color:'#065f46', desc:'Yosemite Westausgang, Groveland, RV-Rückgabe, letzte SF-Chance',
     timeline:[
-      {t:'08:00',n:'RV-Checkliste: Tanks geleert? Saubermachen!',d:'Dump Station vor Ausgang nutzen',c:'#1e40af'},
-      {t:'08:30',n:'Abfahrt Yosemite, Hwy 120 W',d:'Big Oak Flat Road, ~3,5 Std. nach Los Altos',c:'#065f46'},
-      {t:'10:00',n:'Optionaler Stopp: Groveland Gold Town',d:'süßes historisches Städtchen',c:'#ea580c'},
-      {t:'~12:00',n:'Abfahrt auf US-101 S via Modesto/Fremont',d:'Richtung Los Altos/San Francisco Bay',c:'#065f46'},
-      {t:'~14:30',n:'Ankunft Los Altos, RV abgeben',d:'Fotos machen, Zustand checken',c:'#16a34a'},
-      {t:'15:00',n:'Schlüssel abgeben, Danksagung',d:'Mit Kathrin & Damian zusammensein',c:'#ea580c'},
-      {t:'16:00',n:'Letzte SF-Aktivitäten (optional)',d:'Muir Woods, Golden Gate Bridge, Haight-Ashbury',c:'#ea580c'},
+      {t:'09:00',n:'RV-Checkliste: Tanks geleert? Saubermachen!',d:'Dump Station nutzen! Alles aus dem RV!',c:'#1e40af'},
+      {t:'09:30',n:'Abfahrt Yosemite, Hwy 120 W',d:'Big Oak Flat Road, ~3,5 Std. nach Los Altos',c:'#065f46'},
+      {t:'11:00',n:'Optionaler Stopp: Groveland Gold Town',d:'süßes historisches Städtchen',c:'#ea580c'},
+      {t:'~13:00',n:'Abfahrt auf US-101 S via Modesto/Fremont',d:'Richtung Los Altos/San Francisco Bay',c:'#065f46'},
+      {t:'~15:00',n:'Ankunft Los Altos, RV abgeben',d:'Fotos machen, Zustand checken',c:'#16a34a'},
+      {t:'15:30',n:'Schlüssel abgeben, Danksagung',d:'Mit Kathrin & Damian zusammensein',c:'#ea580c'},
+      {t:'16:30',n:'Letzte SF-Aktivitäten (optional)',d:'Muir Woods, Golden Gate Bridge, Haight-Ashbury',c:'#ea580c'},
       {t:'19:00',n:'Letzter gemeinsamer Abend',d:'Abendessen bei Kathrin',c:'#64748b'},
     ],
     cards:[
