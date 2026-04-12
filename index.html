@@ -63,7 +63,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="day-bar" id="dayBar"></div>
 <div id="pages"></div>
 
-<div class="footer">Kalifornien 2026 Reiseguide — Stand 08.04.2026 (Mi=JT+Fresno, Do+Fr=Yosemite 2 Tage, Sa=Los Altos)</div>
+<div class="footer">Kalifornien 2026 Reiseguide — Stand 12.04.2026 (FLUGÄNDERUNG: LH455 annulliert → UA2117+UA989 via Washington D.C.)</div>
 
 <script>
 function mapPin(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';}
@@ -524,26 +524,67 @@ const DAYS = [
 
 
   {
-    date:'2026-04-12', num:14, wd:'So', label:'12.4.', title:'Abreise — Ostersonntag!',
-    color:'#7c2d12', desc:'🐣 Ostersonntag! SFO → Frankfurt, Flug LH456 14:40',
+    date:'2026-04-12', num:14, wd:'So', label:'12.4.', title:'Ostersonntag — Abflug spät!',
+    color:'#7c2d12', desc:'🐣 LH455 annulliert! Neuer Flug: UA2117 SFO→Washington 21:30. Ganzer Tag frei!',
     timeline:[
-      {t:'07:00',n:'Letzte Minuten packen',d:'Nichts vergessen!',c:'#1e40af'},
-      {t:'08:00',n:'Breakfast bei Kathrin',d:'Goodbye Hug!',c:'#ea580c'},
-      {t:'08:30',n:'Abfahrt zu SFO',d:'US-101 N → SFO (30 Min)',c:'#1e40af'},
-      {t:'10:00',n:'Ankunft SFO, International Terminal G',d:'3h vorher da sein!',c:'#1e40af'},
-      {t:'10:15',n:'Check-in, Gepäck abgeben',d:'Reisepass vorzeigen',c:'#1e40af'},
-      {t:'10:45',n:'Security, Duty Free Shopping',d:'Letzte Souvenirs!',c:'#ea580c'},
-      {t:'12:00',n:'Boarding, Gate Check',d:'LH456 Terminal G',c:'#1e40af'},
-      {t:'14:40',n:'Departure SFO → Frankfurt',d:'Nonstop, 10h Flugzeit',c:'#dc2626'},
-      {t:'13.04. 10:25',n:'Ankunft Frankfurt Terminal 1',d:'Umstieg, Baggage, Zug nach Hause',c:'#16a34a'},
+      {t:'09:00',n:'Ausschlafen — kein Stress!',d:'Ostersonntag, neuer Flug erst 21:30!',c:'#16a34a'},
+      {t:'10:00',n:'Gemütliches Osterfrühstück',d:'Bei Kathrin & Damian — genießt den Morgen!',c:'#ea580c'},
+      {t:'11:00',n:'Letzte SF-Aktivitäten',d:'Golden Gate Bridge Walk? Stanford Campus? Relaxen?',c:'#1e40af'},
+      {t:'14:00',n:'Mittagessen in Palo Alto/Los Altos',d:'University Ave hat tolle Restaurants',c:'#ea580c'},
+      {t:'16:00',n:'Koffer packen, Aufräumen',d:'Alles einpacken, Ladekabel nicht vergessen!',c:'#64748b'},
+      {t:'17:30',n:'Abschied von Kathrin & Damian',d:'Danke sagen! ❤️',c:'#dc2626'},
+      {t:'18:00',n:'Fahrt Los Altos → SFO',d:'US-101 N, ~30 Min',c:'#1e40af'},
+      {t:'18:30',n:'Ankunft SFO — United Terminal',d:'Check-in, Gepäck aufgeben',c:'#1e40af'},
+      {t:'19:30',n:'Security + Gate',d:'International braucht mehr Zeit',c:'#1e40af'},
+      {t:'21:30',n:'✈️ Abflug UA2117 SFO → Washington IAD',d:'5h 26min Flug. Ankunft 05:56 Ortszeit!',c:'#dc2626'},
     ],
     cards:[
-      {emoji:'✈️',title:'Fluginfos',cls:'r',body:'<p><strong>SFO → FRA</strong> | Abflug 14:40 | Ankunft 13.04. 10:25</p><p>International Terminal G. 3 Stunden vorher da sein!</p><p>Los Altos → SFO: ~30 Minuten.</p><p>🐣 <strong>OSTERSONNTAG!</strong> Flughafen kann voller sein als normal. Puffer einplanen!</p><p>Letzte Chance: Duty Free, letzte Souvenirs!</p>',links:[{text:'Apple Maps SFO',url:'https://maps.apple.com/?q=SFO+Airport&ll=37.6213,-122.3790'}]},
-      {emoji:'📋',title:'Abreise-Checkliste',cls:'o',body:'<p>☐ Pässe & Boarding Passes</p><p>☐ Alle Ladekabel eingepackt</p><p>☐ Souvenirs im Koffer</p><p>☐ Nichts bei Kathrin vergessen</p><p>☐ Danke sagen!</p>'},
+      {emoji:'✈️',title:'⚠️ FLUGÄNDERUNG!',cls:'r',body:'<p><strong>LH455 SFO→FRA ANNULLIERT!</strong></p><p><strong>Neue Route (2 Flüge):</strong></p><p>1️⃣ UA2117: SFO → IAD (Washington) | 21:30 → 05:56+1</p><p>2️⃣ UA989: IAD → FRA | 17:15 → 07:20+1</p><p>Bonus: Ganzer Tag in Washington D.C.! 🇺🇸</p><p>Buchung: 8SOMUS</p>',links:[{text:'United Airlines',url:'https://www.united.com'}]},
+      {emoji:'🐣',title:'Ostersonntag — Bonus-Tag!',cls:'p',body:'<p>Durch den späten Flug (21:30!) habt ihr den ganzen Ostersonntag frei!</p><p>• Golden Gate Bridge Walk (2,7 km, kostenlos)</p><p>• Stanford Campus spazieren</p><p>• Palo Alto University Ave (Restaurants, Shops)</p><p>• Oder einfach relaxen bei Kathrin</p>'},
+      {emoji:'📋',title:'Abreise-Checkliste',cls:'o',body:'<p>☐ Pässe & Boarding Passes (United App!)</p><p>☐ Alle Ladekabel eingepackt</p><p>☐ Souvenirs im Koffer (max 23kg!)</p><p>☐ Snacks für Nachtflug</p><p>☐ Kopfhörer + Nackenkissen</p><p>☐ Nichts bei Kathrin vergessen!</p>'},
     ],
     spots:[
-      {name:'SFO Terminal G',lat:37.6213,lng:-122.3790,emoji:'✈️',color:'#dc2626'},
-      {name:'Los Altos Home',lat:37.3688,lng:-122.1145,emoji:'🏠',color:'#16a34a'},
+      {name:'SFO Airport',lat:37.6213,lng:-122.3790,emoji:'✈️',color:'#dc2626'},
+      {name:'Los Altos',lat:37.3688,lng:-122.1145,emoji:'🏠',color:'#16a34a'},
+      {name:'Golden Gate Bridge',lat:37.8199,lng:-122.4783,emoji:'🌉',color:'#ea580c'},
+    ],
+    options:[]
+  },
+
+
+  {
+    date:'2026-04-13', num:15, wd:'Mo', label:'13.4.', title:'Washington D.C. — Bonus-Tag! 🇺🇸',
+    color:'#1e3a5f', desc:'11 Stunden in der Hauptstadt! Smithsonian (GRATIS!), National Mall, White House',
+    timeline:[
+      {t:'05:56',n:'Ankunft Washington Dulles (IAD)',d:'UA2117 gelandet! Gepäck wird durchgecheckt nach FRA',c:'#1e40af'},
+      {t:'06:30',n:'Dulles → Metro Silver Line',d:'Station direkt am Terminal! Richtung Downtown ~50 Min',c:'#1e40af'},
+      {t:'07:20',n:'Ankunft Smithsonian Station',d:'Ihr steht mitten auf der National Mall!',c:'#16a34a'},
+      {t:'07:30',n:'☕ Frühstück am Capitol Hill',d:'Eastern Market oder Starbucks auf der Mall',c:'#ea580c'},
+      {t:'08:15',n:'🏛️ Capitol Building (von außen)',d:'Imposante Kuppel — DAS Symbol der USA!',c:'#1e40af'},
+      {t:'08:45',n:'National Mall Spaziergang',d:'Vom Capitol Richtung Washington Monument',c:'#16a34a'},
+      {t:'09:15',n:'🗿 Washington Monument',d:'169m Obelisk! Fotos mit Reflecting Pool',c:'#1e40af'},
+      {t:'09:45',n:'🏛️ Lincoln Memorial',d:'Treppe hoch! Blick über Reflecting Pool → Monument',c:'#1e40af'},
+      {t:'10:15',n:'🚀 Air & Space Museum',d:'GRATIS! Für Mika DER Hit: Mondlandefähre, Spirit of St. Louis, Space Shuttle!',c:'#dc2626'},
+      {t:'12:00',n:'🍔 Mittagessen Museum-Café oder Food Trucks',d:'Viele Food Trucks auf der Mall!',c:'#ea580c'},
+      {t:'12:45',n:'🏛️ Weißes Haus (von außen)',d:'15 Min Fußweg. Pennsylvania Avenue Seite!',c:'#1e40af'},
+      {t:'13:15',n:'Optional: Noch ein Museum!',d:'Natural History (Dinos! Hope Diamond!) oder American History',c:'#16a34a'},
+      {t:'14:00',n:'🚇 Metro zurück nach Dulles',d:'Silver Line, ~50 Min. Puffer einplanen!',c:'#1e40af'},
+      {t:'15:00',n:'Ankunft IAD — Check-in international',d:'2h vor Abflug. Duty Free!',c:'#1e40af'},
+      {t:'17:15',n:'✈️ Abflug UA989 IAD → Frankfurt',d:'8h 5min Nachtflug. Ankunft 07:20 am 14.04.!',c:'#dc2626'},
+    ],
+    cards:[
+      {emoji:'🇺🇸',title:'Washington D.C. in 8 Stunden!',cls:'p',body:'<p><strong>Alles GRATIS!</strong> Smithsonian-Museen kosten NIX!</p><p><strong>Top 5 Must-Sees:</strong></p><p>1. National Mall (Capitol → Monument → Lincoln)</p><p>2. Air & Space Museum 🚀 (Mika!)</p><p>3. Weißes Haus (von außen)</p><p>4. Lincoln Memorial (Treppe!)</p><p>5. Washington Monument</p><p><strong>Optional:</strong> Natural History (Dinos!), American History</p>'},
+      {emoji:'🚇',title:'Metro Silver Line',cls:'o',body:'<p><strong>Dulles → Downtown:</strong> Silver Line direkt vom Airport!</p><p>• Station im Terminal, kein Shuttle nötig</p><p>• Fahrt ~50 Min bis Smithsonian Station</p><p>• SmarTrip-Karte am Automaten kaufen ($2 Karte + ~$6 Fahrt)</p><p>• Oder kontaktlos mit Kreditkarte zahlen!</p><p><strong>Zurück:</strong> Gleiche Linie, Richtung Dulles/Ashburn</p>',links:[{text:'Metro Map',url:'https://www.wmata.com/schedules/maps/'}]},
+      {emoji:'✈️',title:'Flug nach Hause',cls:'r',body:'<p><strong>UA989 IAD → FRA</strong></p><p>Abflug: 17:15 | Ankunft: 07:20 +1 (14. April)</p><p>8h 5min Nachtflug — versucht zu schlafen!</p><p>⚠️ Spätestens 15:00 am Gate sein!</p><p>Gepäck sollte von SFO durchgecheckt sein — am United-Schalter bestätigen!</p>'},
+      {emoji:'📋',title:'Washington Checkliste',cls:'o',body:'<p>☐ Bequeme Schuhe (viel laufen!)</p><p>☐ Rucksack mit Wasser + Snacks</p><p>☐ Ladekabel im Handgepäck</p><p>☐ Pässe griffbereit (international!)</p><p>☐ SmarTrip oder Kreditkarte für Metro</p><p>☐ Jacke (April in D.C. ~10-15°C morgens!)</p>'},
+    ],
+    spots:[
+      {name:'Dulles Airport (IAD)',lat:38.9531,lng:-77.4565,emoji:'✈️',color:'#dc2626'},
+      {name:'Capitol Building',lat:38.8899,lng:-77.0091,emoji:'🏛️',color:'#1e40af'},
+      {name:'Washington Monument',lat:38.8895,lng:-77.0353,emoji:'🗿',color:'#1e40af'},
+      {name:'Lincoln Memorial',lat:38.8893,lng:-77.0502,emoji:'🏛️',color:'#1e40af'},
+      {name:'Air & Space Museum',lat:38.8882,lng:-77.0199,emoji:'🚀',color:'#dc2626'},
+      {name:'Weißes Haus',lat:38.8977,lng:-77.0365,emoji:'🏛️',color:'#1e40af'},
     ],
     options:[]
   },
